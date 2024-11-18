@@ -22,7 +22,3 @@ namespace PIN
 #define STEPPER_ANGLE 1.8 // 1.8 degrees per step
 #define STEPPER_STEPS_PER_REV 200 // 200 steps per revolution
 
-
-#if !TEST_MODE
-#define STEPPER_LIB <AccelStepper.h>
-#else
