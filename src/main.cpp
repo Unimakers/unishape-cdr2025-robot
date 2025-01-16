@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <RobotMove.hpp>
 
 
 enum struct STATE{
@@ -7,12 +8,20 @@ enum struct STATE{
     PAUSED
 };
 // put function declarations here:
-int myFunction(int, int);
+void waitTirette(){
+    while(digitalRead(PIN::DIVERS::TIRETTE));
+    Serial.println("Tirette enclenchée");
+    delay(1000);
+    while(!digitalRead(PIN::DIVERS::TIRETTE));
+    Serial.println("Tirette retirée");
+    delay(1000);
+}
 void setup() {
-    // put your setup code here, to run once:
-    int result = myFunction(2, 3);
-    Serial.begin(9600);
-    Serial.println(result);
+    Serial.begin(115200);
+    delay(250);
+    Serial.println("Préinitialisation");
+    waitTirette();
+    Serial.println("Initialisation");
 }
 
 void loop() {

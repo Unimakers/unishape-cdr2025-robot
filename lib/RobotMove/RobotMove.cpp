@@ -52,12 +52,11 @@ bool RobotMove::moveTo(Coord target, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT
     if(paused){
         return false;
     }
-    int dx = target.x - currentPos.x;
-    int dy = target.y - currentPos.y;
-    float angle = atan2(dy,dx);
-    int distance = sqrt(dx*dx + dy*dy);
-    int angleToTurn = angle - currentPos.angle;
-    turnTo(angleToTurn);
+    int x = target.x - currentPos.x;
+    int y = target.y - currentPos.y;
+    int distance = sqrt(x*x + y*y);
+    float angle = atan2(y,x);
+    turnTo(angle);
     forward(distance, speed);
     return true;
 }
@@ -112,4 +111,27 @@ void RobotMove::checkPosition(){
     currentPos.x = (left.currentPosition() + right.currentPosition())/2;
     currentPos.y = (left.currentPosition() + right.currentPosition())/2;
     currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;
+}
+
+bool RobotMove::turn(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
+    if(paused){
+        return false;
+    }
+    int diameter = ROBOT_VARIABLES::WIDTH;
+    float circleArc = angle * (diameter/2);
+    currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(circleArc);
+    currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(-circleArc);
+    left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
+    right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
+    left.moveTo(left.currentPosition() + currentAction.left);
+    right.moveTo(right.currentPosition() + currentAction.right);
+    return true;
+}
+bool RobotMove::turnTo(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
+    if(paused){
+        return false;
+    }
+    int angleToTurn = angle - currentPos.angle;
+    turn(angleToTurn, speed);
+    return true;
 }
