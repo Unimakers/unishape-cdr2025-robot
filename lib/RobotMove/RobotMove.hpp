@@ -22,12 +22,14 @@ class RobotMove
     AccelStepper left, right;
     ActionDistance currentAction;
     bool paused=true;
+
     public:
     Coord currentPos;
-    bool forward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
+    bool forward(int, int=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
     bool backward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
         return forward(-distance, speed);
     }
+    void printHello();
     bool turn(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
     bool turnTo(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
     bool moveTo(Coord target, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);

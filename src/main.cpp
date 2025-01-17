@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <RobotMove.hpp>
 
+RobotMove robot;
+
 enum struct STATE{
     IDLE,
     MOVING,
@@ -21,19 +23,19 @@ void waitTirette(){
     delay(1000);
     tone(12,175,250);
 }
-RobotMove robot = RobotMove();
 // int startTime=0;
 void setup() {
     Serial.begin(115200);
     delay(1000);
     Serial.println("Préinitialisation");
     tone(12,444,250);
-    robot.forward(100);
     delay(500);
     pinMode(PIN::DIVERS::TIRETTE,INPUT_PULLUP);
     tone(12,300,250);
     waitTirette();
-    Serial.println("Initialisation");
+    robot.printHello();
+    robot.forward(100);
+    Serial.println("Fin initialisation");
     // startTime= millis();
 }
 void loop() {

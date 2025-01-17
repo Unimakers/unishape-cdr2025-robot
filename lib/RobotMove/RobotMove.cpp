@@ -13,6 +13,9 @@ RobotMove::RobotMove():left(AccelStepper::DRIVER, PIN::STEPPERS::LEFT_STEP, PIN:
     right.setPinsInverted(ROBOT_VARIABLES::STEPPER::RIGHT_INVERTED);
     currentPos = {0,0,0};
 }
+void RobotMove::printHello(){
+    Serial.println("Hello");
+}
 /// @brief check if the robot has reached the target
 /// @return true if the robot has reached the target else false
 bool RobotMove::reachedTarget(){
@@ -29,15 +32,20 @@ bool RobotMove::forward(int distance, int speed){
     if(paused){
         return false;
     }
+    Serial.println("Hello2Forward");
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(distance);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(distance);
+    Serial.println("Okok");
+    Serial.println("Speed : "+String(speed));
+    Serial.println("Step Speed: "+String(ROBOT_VARIABLES::STEPPER::MmToStep(speed)));
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
     right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
+    left.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
+    right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
     left.moveTo(left.currentPosition() + currentAction.left);
     right.moveTo(right.currentPosition() + currentAction.right);
     return true;
 }
-
 
 
 /// @brief move to a target coordinate with a speed in mm/s
@@ -105,6 +113,7 @@ Coord RobotMove::getCurrentCoords(){
 bool RobotMove::Run(){
     left.run();
     right.run();
+    return true;
 }
 /// @brief check the current position of the robot
 void RobotMove::checkPosition(){

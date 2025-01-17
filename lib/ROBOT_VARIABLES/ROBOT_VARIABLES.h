@@ -66,6 +66,7 @@ namespace ROBOT_VARIABLES
             DEFAULT_SPEED = 50;  // 50 mm/s
         constexpr float
             ANGLE = 1.8,           // 1.8 degrees per step
+            ACCELERATION = 20.0,    // 1 mm/s^2
             STEPS_PER_REV = 200.0; // 200 steps per revolution
         constexpr bool
             LEFT_INVERTED = false,
