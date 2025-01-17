@@ -1,10 +1,14 @@
 #include "RobotMove.hpp"
-
+#ifndef ROBOT_VARIABLES_H
+#include "ROBOT_VARIABLES.h"
+#endif
 /// @brief constructor for the RobotMove class
 RobotMove::RobotMove():left(AccelStepper::DRIVER, PIN::STEPPERS::LEFT_STEP, PIN::STEPPERS::LEFT_DIR), right(AccelStepper::DRIVER, PIN::STEPPERS::RIGHT_STEP, PIN::STEPPERS::RIGHT_DIR)
 {
-    pinMode(PIN::STEPPERS::ENABLE, OUTPUT);
-    digitalWrite(PIN::STEPPERS::ENABLE, HIGH);
+    pinMode(PIN::STEPPERS::LEFT_ENABLE, OUTPUT);
+    digitalWrite(PIN::STEPPERS::LEFT_ENABLE, LOW);
+    pinMode(PIN::STEPPERS::RIGHT_ENABLE, OUTPUT);
+    digitalWrite(PIN::STEPPERS::RIGHT_ENABLE, LOW);
     left.setPinsInverted(ROBOT_VARIABLES::STEPPER::LEFT_INVERTED);
     right.setPinsInverted(ROBOT_VARIABLES::STEPPER::RIGHT_INVERTED);
     currentPos = {0,0,0};
@@ -21,7 +25,7 @@ bool RobotMove::reachedTarget(){
 /// @param distance 
 /// @param speed 
 /// @return return false if the robot is paused else true
-bool RobotMove::forward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
+bool RobotMove::forward(int distance, int speed){
     if(paused){
         return false;
     }
@@ -34,21 +38,13 @@ bool RobotMove::forward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAUL
     return true;
 }
 
-/// @brief go backward for a distance in mm with a speed in mm/s
-/// @param distance
-/// @param speed
-/// @return return false if the robot is paused else true
-bool RobotMove::backward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
-    return forward(-distance, speed);
-}
-
 
 
 /// @brief move to a target coordinate with a speed in mm/s
 /// @param target 
 /// @param speed 
 /// @return return false if the robot is paused else true
-bool RobotMove::moveTo(Coord target, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
+bool RobotMove::moveTo(Coord target, int speed){
     if(paused){
         return false;
     }
@@ -106,6 +102,10 @@ void RobotMove::setCurrentCoords(Coord c){
 Coord RobotMove::getCurrentCoords(){
     return currentPos;
 }
+bool RobotMove::Run(){
+    left.run();
+    right.run();
+}
 /// @brief check the current position of the robot
 void RobotMove::checkPosition(){
     currentPos.x = (left.currentPosition() + right.currentPosition())/2;
@@ -113,7 +113,7 @@ void RobotMove::checkPosition(){
     currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;
 }
 
-bool RobotMove::turn(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
+bool RobotMove::turn(int angle, int speed){
     if(paused){
         return false;
     }
@@ -127,7 +127,7 @@ bool RobotMove::turn(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEE
     right.moveTo(right.currentPosition() + currentAction.right);
     return true;
 }
-bool RobotMove::turnTo(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
+bool RobotMove::turnTo(int angle, int speed){
     if(paused){
         return false;
     }
