@@ -41,6 +41,7 @@ namespace PIN
 namespace DEV_VARIABLES
 {
     constexpr bool DEV_TEST_IN_PAMI = TEST_PAMI_MODE;
+    constexpr int MAX_ACTION_AMOUNT = 20;
 }
 
 namespace ROBOT_VARIABLES
@@ -63,13 +64,13 @@ namespace ROBOT_VARIABLES
         constexpr float STEPS_PER_MM = STEPS_PER_REV / (WHEEL_DIAMETER * 3.14159265359); // 200 steps per revolution / (0.06m * 3.14159265359)
 #endif
         constexpr int 
-            DEFAULT_SPEED = 50;  // 50 mm/s
+            DEFAULT_SPEED = 200;  // 200 mm/s
         constexpr float
             ANGLE = 1.8,           // 1.8 degrees per step
-            ACCELERATION = 20.0,    // 1 mm/s^2
+            ACCELERATION = 100.0,    // 100 mm/s^2 
             STEPS_PER_REV = 200.0; // 200 steps per revolution
         constexpr bool
-            LEFT_INVERTED = false,
+            LEFT_INVERTED = true,
             RIGHT_INVERTED = false;
         constexpr float MmToStep(float mm)
         {

@@ -38,15 +38,16 @@ bool RobotMove::forward(int distance, int speed){
     Serial.println("Okok");
     Serial.println("Speed : "+String(speed));
     Serial.println("Step Speed: "+String(ROBOT_VARIABLES::STEPPER::MmToStep(speed)));
+    Serial.println("CurAction Left: "+String(currentAction.left));
+    Serial.println("CurAction Right: "+String(currentAction.right));
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
     right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
     left.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
     right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
-    left.moveTo(left.currentPosition() + currentAction.left);
-    right.moveTo(right.currentPosition() + currentAction.right);
+    left.move(currentAction.left);
+    right.move(currentAction.right);
     return true;
 }
-
 
 /// @brief move to a target coordinate with a speed in mm/s
 /// @param target 
@@ -78,8 +79,9 @@ bool RobotMove::pause(){
 /// @brief  resume the robot
 /// @return true
 bool RobotMove::resume(){
-    left.moveTo(left.currentPosition() + currentAction.left);
-    right.moveTo(right.currentPosition() + currentAction.right);
+    Serial.println("Resume robot");
+    left.move(currentAction.left);
+    right.move(currentAction.right);
     paused = false;
     return true;
 }
@@ -121,19 +123,23 @@ void RobotMove::checkPosition(){
     currentPos.y = (left.currentPosition() + right.currentPosition())/2;
     currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;
 }
-
+/// @brief Turn the robot
+/// @param angle angle in degrees
+/// @param speed speed in mm/s
+/// @return false if paused else true
 bool RobotMove::turn(int angle, int speed){
     if(paused){
         return false;
     }
     int diameter = ROBOT_VARIABLES::WIDTH;
-    float circleArc = angle * (diameter/2);
+    double angleRad = ((double) angle) * PI / 180;
+    float circleArc = angleRad * (diameter/2);
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(circleArc);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(-circleArc);
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
     right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
-    left.moveTo(left.currentPosition() + currentAction.left);
-    right.moveTo(right.currentPosition() + currentAction.right);
+    left.move(currentAction.left);
+    right.move(currentAction.right);
     return true;
 }
 bool RobotMove::turnTo(int angle, int speed){

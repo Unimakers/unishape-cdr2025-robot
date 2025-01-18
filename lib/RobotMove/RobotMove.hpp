@@ -25,7 +25,7 @@ class RobotMove
 
     public:
     Coord currentPos;
-    bool forward(int, int=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
+    bool forward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
     bool backward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
         return forward(-distance, speed);
     }
