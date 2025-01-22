@@ -133,6 +133,7 @@ bool RobotMove::turn(int angle, int speed){
     }
     int diameter = ROBOT_VARIABLES::WIDTH;
     double angleRad = ((double) angle) * PI / 180;
+    Serial.println("AngleRad: "+String(angleRad));
     float circleArc = angleRad * (diameter/2);
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(circleArc);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(-circleArc);
