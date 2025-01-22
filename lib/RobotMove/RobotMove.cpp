@@ -138,6 +138,8 @@ bool RobotMove::turn(int angle, int speed){
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(-circleArc);
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
     right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
+    left.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
+    right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
     left.move(currentAction.left);
     right.move(currentAction.right);
     return true;
