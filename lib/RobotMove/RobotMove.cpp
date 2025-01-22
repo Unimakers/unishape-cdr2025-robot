@@ -133,7 +133,7 @@ bool RobotMove::turn(int angle, int speed){
     }
     int diameter = ROBOT_VARIABLES::WIDTH;
     double angleRad = ((double) angle) * PI / 180;
-    float circleArc = angleRad * (diameter/2);
+    float circleArc = angleRad * (diameter);///2);
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(circleArc);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(-circleArc);
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
