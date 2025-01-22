@@ -53,15 +53,15 @@ bool callAction(ActionItem action){
 }
 
 typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT];
-Actions actions = Actions{
-    {.action=ACTION::FORWARD,.distance=100},
+Actions actions = {
+    //{.action=ACTION::FORWARD,.distance=500},
     {.action=ACTION::TURN,.angle=90},
-    {.action=ACTION::FORWARD,.distance=100},
-    {.action=ACTION::TURN,.angle=90},
-    {.action=ACTION::FORWARD,.distance=100},
-    {.action=ACTION::TURN,.angle=90},
-    {.action=ACTION::FORWARD,.distance=100},
-    {.action=ACTION::TURN,.angle=90}
+    // {.action=ACTION::FORWARD,.distance=100},
+    // {.action=ACTION::TURN,.angle=90},
+    // {.action=ACTION::FORWARD,.distance=100},
+    // {.action=ACTION::TURN,.angle=90},
+    // {.action=ACTION::FORWARD,.distance=100},
+    // {.action=ACTION::TURN,.angle=90}
 };
 int actionIndex=0;
 enum struct STATE{
@@ -111,12 +111,10 @@ void loop() {
         if(actionIndex<DEV_VARIABLES::MAX_ACTION_AMOUNT){
             state=STATE::MOVING;
             bool error = callAction(actions[actionIndex]);
+            if(error){
+                Serial.println("Erreur dans l'action");
+            }
             actionIndex++;
         }
     }
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-    return x + y;
 }
