@@ -111,7 +111,7 @@ void loop() {
         if(actionIndex<DEV_VARIABLES::MAX_ACTION_AMOUNT){
             state=STATE::MOVING;
             bool error = callAction(actions[actionIndex]);
-            if(error){
+            if(!error){
                 Serial.println("Erreur dans l'action");
             }
             actionIndex++;
