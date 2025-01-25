@@ -54,14 +54,14 @@ bool callAction(ActionItem action){
 
 typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT];
 Actions actions = {
-    //{.action=ACTION::FORWARD,.distance=500},
+    {.action=ACTION::FORWARD,.distance=500},
     {.action=ACTION::TURN,.angle=90},
-    // {.action=ACTION::FORWARD,.distance=100},
-    // {.action=ACTION::TURN,.angle=90},
-    // {.action=ACTION::FORWARD,.distance=100},
-    // {.action=ACTION::TURN,.angle=90},
-    // {.action=ACTION::FORWARD,.distance=100},
-    // {.action=ACTION::TURN,.angle=90}
+    {.action=ACTION::FORWARD,.distance=100},
+    {.action=ACTION::TURN,.angle=90},
+    {.action=ACTION::FORWARD,.distance=100},
+    {.action=ACTION::TURN,.angle=90},
+    {.action=ACTION::FORWARD,.distance=100},
+    {.action=ACTION::TURN,.angle=90}
 };
 int actionIndex=0;
 enum struct STATE{

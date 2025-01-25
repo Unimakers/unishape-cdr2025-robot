@@ -52,7 +52,7 @@ namespace ROBOT_VARIABLES
     constexpr float WHEEL_DIAMETER = 0.06; // 0.06 m = 6cm
 #endif
 #if TEST_PAMI_MODE == true
-    constexpr float WIDTH = 120; // 120 mm = 12 cm
+    constexpr float WIDTH = 95; // 95 mm = 9.5 cm
 #else
     constexpr float WIDTH = 300; // 300 mm = 30 cm
 #endif
