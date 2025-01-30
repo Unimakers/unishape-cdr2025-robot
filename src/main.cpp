@@ -54,20 +54,13 @@ bool callAction(ActionItem action){
 
 typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT];
 Actions actions = {
-    {.action=ACTION::FORWARD,.distance=500},
-    {.action=ACTION::TURN,.angle=90},
-    {.action=ACTION::FORWARD,.distance=100},
-    {.action=ACTION::TURN,.angle=90},
-    {.action=ACTION::FORWARD,.distance=100},
-    {.action=ACTION::TURN,.angle=90},
-    {.action=ACTION::FORWARD,.distance=100},
-    {.action=ACTION::TURN,.angle=90}
+    {.action=ACTION::MOVETO,.speed=100,.target={100,100,0}}
 };
 int actionIndex=0;
 enum struct STATE{
     INITIALIZING,
     IDLE,
-    MOVING,
+    RUNNING,
     PAUSED // paused by security and not by external event => paused non programmed in action list (e.g. lidar detects obstacle)
 };
 STATE state=STATE::INITIALIZING;
@@ -100,16 +93,17 @@ void setup() {
     robot.printHello();
     Serial.println("Fin initialisation");
     state=STATE::IDLE;
+    robot.setCurrentCoords(Coord{0,0,0});
     // startTime= millis();
 }
 void loop() {
     robot.Run();
-    if(robot.reachedTarget() && state==STATE::MOVING){
+    if(robot.reachedTarget() && state==STATE::RUNNING){
         state=STATE::IDLE;
     }
     if(state==STATE::IDLE){
         if(actionIndex<DEV_VARIABLES::MAX_ACTION_AMOUNT){
-            state=STATE::MOVING;
+            state=STATE::RUNNING;
             bool error = callAction(actions[actionIndex]);
             if(!error){
                 Serial.println("Erreur dans l'action");

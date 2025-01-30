@@ -63,6 +63,7 @@ bool RobotMove::moveTo(Coord target, int speed){
     float angle = atan2(y,x);
     turnTo(angle);
     forward(distance, speed);
+    turnTo(target.angle);
     return true;
 }
 
