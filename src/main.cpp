@@ -11,10 +11,26 @@ enum struct ACTION{
     MOVETO,
     PAUSE,
     RESUME,
-    WAIT
+    WAIT,
+    BUZZ
 };
 
-typedef struct {
+float Waitstart = 0 ;
+bool actionfinished(Action action){
+if (action.action == ACTION::WAIT){
+    if (millis()>Waitstart+action.time*1000)
+    return true;
+    else {
+        return false ;
+    }
+}
+else{
+    return robot.reachedTarget();
+}
+}
+
+
+typedef struct { 
     ACTION action;
     int distance, speed, angle,time;
     Coord target;
@@ -46,6 +62,7 @@ bool callAction(ActionItem action){
         case ACTION::WAIT:
             return true;
             break;
+        case ACTION::BUZZ: 
         default:
             return false;
     }
@@ -53,7 +70,8 @@ bool callAction(ActionItem action){
 
 typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT];
 Actions actions = {
-    {.action=ACTION::MOVETO,.speed=100,.target={100,100,0}}
+    // {.action=ACTION::MOVETO,.speed=100,.target={100,100,0}} 
+    {.action=ACTION::WAIT,.time=100}
 };
 int actionIndex=0;
 enum struct STATE{
@@ -97,7 +115,7 @@ void setup() {
 }
 void loop() {
     robot.Run();
-    if(robot.reachedTarget() && state==STATE::RUNNING){
+    if(actionfinished(actions[actionIndex]) && state==STATE::RUNNING){
         state=STATE::IDLE;
     }
     if(state==STATE::IDLE){
