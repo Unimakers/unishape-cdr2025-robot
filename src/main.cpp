@@ -44,7 +44,6 @@ bool callAction(ActionItem action){
             return robot.resume();
             break;
         case ACTION::WAIT:
-            delay(action.time);
             return true;
             break;
         default:
