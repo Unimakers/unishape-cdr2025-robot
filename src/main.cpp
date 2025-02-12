@@ -17,16 +17,16 @@ enum struct ACTION{
 
 float Waitstart = 0 ;
 bool actionfinished(Action action){
-if (action.action == ACTION::WAIT){
-    if (millis()>Waitstart+action.time*1000)
-    return true;
-    else {
-        return false ;
+    if (action.action == ACTION::WAIT){
+        if (millis()>Waitstart+action.time*1000)
+        return true;
+        else {
+            return false ;
+        }
     }
-}
-else{
-    return robot.reachedTarget();
-}
+    else{
+        return robot.reachedTarget();
+    }
 }
 
 
