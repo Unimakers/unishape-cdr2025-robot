@@ -16,7 +16,7 @@ enum struct ACTION{
 };
 
 float Waitstart = 0 ;
-bool actionfinished(Action action){
+bool actionfinished(ActionItem action){
 if (action.action == ACTION::WAIT){
     if (millis()>Waitstart+action.time*1000)
     return true;
