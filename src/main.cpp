@@ -23,13 +23,6 @@ typedef struct {
 
 float Waitstart = 0 ;
 bool actionfinished(ActionItem action){
-<<<<<<< HEAD
-if (action.action == ACTION::WAIT){
-    if (millis()>Waitstart+action.time*1000)
-    return true;
-    else {
-        return false ;
-=======
     if (action.action == ACTION::WAIT){
         if (millis()>Waitstart+action.time*1000)
         return true;
@@ -39,7 +32,6 @@ if (action.action == ACTION::WAIT){
     }
     else{
         return robot.reachedTarget();
->>>>>>> b560f2e067bb0cddc93ce320dc14c648958810ef
     }
 }
 
