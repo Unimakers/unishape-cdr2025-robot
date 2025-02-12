@@ -16,6 +16,12 @@ enum struct ACTION{
     BUZZ
 };
 
+typedef struct { 
+    ACTION action;
+    int distance, speed, angle,time,tonality;
+    Coord target;
+} ActionItem;
+
 float Waitstart = 0 ;
 bool actionfinished(ActionItem action){
     if (action.action == ACTION::WAIT){
@@ -30,12 +36,6 @@ bool actionfinished(ActionItem action){
     }
 }
 
-
-typedef struct { 
-    ACTION action;
-    int distance, speed, angle,time;
-    Coord target;
-} ActionItem;
 bool callAction(ActionItem action){
     if(action.speed==0) action.speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED;
     switch(action.action){
@@ -64,6 +64,9 @@ bool callAction(ActionItem action){
             return true;
             break;
         case ACTION::BUZZ: 
+            tone(12,action.tonality,action.time);
+            return true;
+            break;
         default:
             return false;
     }
@@ -72,7 +75,9 @@ bool callAction(ActionItem action){
 typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT];
 Actions actions = {
     // {.action=ACTION::MOVETO,.speed=100,.target={100,100,0}} 
-    {.action=ACTION::WAIT,.time=100}
+    {.action=ACTION::BUZZ,.time=250,.tonality=450},
+    {.action=ACTION::WAIT,.time=10},
+    {.action=ACTION::BUZZ,.time=250,.tonality=450}
 };
 int actionIndex=0;
 enum struct STATE{
