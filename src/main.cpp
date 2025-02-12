@@ -6,9 +6,10 @@ RobotMove robot;
 enum struct ACTION{
     FORWARD,
     BACKWARD,
-    TURN,
-    TURNTO,
-    MOVETO,
+    TURN, //tourne 
+    
+    TURNTO, // tourne jusqu'a votre un angle donnée
+    MOVETO, 
     PAUSE,
     RESUME,
     WAIT,
