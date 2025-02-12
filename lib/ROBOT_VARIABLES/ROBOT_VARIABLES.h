@@ -73,13 +73,6 @@ namespace ROBOT_VARIABLES
 #endif
     namespace STEPPER
     {
-#if TEST_ROBOT_MODE == 1
-        constexpr float STEPS_PER_MM = 14.8F;
-#elif TEST_ROBOT_MODE == 2
-        constexpr float STEPS_PER_MM = STEPS_PER_REV / (WHEEL_DIAMETER * 3.14159265359); // 200 steps per revolution / (0.06m * 3.14159265359)
-#else
-        constexpr float STEPS_PER_MM = STEPS_PER_REV / (WHEEL_DIAMETER * 3.14159265359); // 200 steps per revolution / (0.06m * 3.14159265359)
-#endif
         constexpr int
             DEFAULT_SPEED = 200; // 200 mm/s
         constexpr float
@@ -89,6 +82,13 @@ namespace ROBOT_VARIABLES
         constexpr bool
             LEFT_INVERTED = true,
             RIGHT_INVERTED = false;
+#if TEST_ROBOT_MODE == 1
+        constexpr float STEPS_PER_MM = 14.8F;
+#elif TEST_ROBOT_MODE == 2
+        constexpr float STEPS_PER_MM = STEPS_PER_REV / (WHEEL_DIAMETER * 3.14159265359); // 200 steps per revolution / (0.06m * 3.14159265359)
+#else
+        constexpr float STEPS_PER_MM = STEPS_PER_REV / (WHEEL_DIAMETER * 3.14159265359); // 200 steps per revolution / (0.06m * 3.14159265359)
+#endif
         constexpr float MmToStep(float mm)
         {
             return mm * STEPS_PER_MM;
