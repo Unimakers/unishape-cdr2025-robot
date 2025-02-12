@@ -75,9 +75,9 @@ bool callAction(ActionItem action){
 typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT];
 Actions actions = {
     // {.action=ACTION::MOVETO,.speed=100,.target={100,100,0}} 
-    {.action=ACTION::BUZZ,.time=250,.tonality=450},
-    {.action=ACTION::WAIT,.time=10},
-    {.action=ACTION::BUZZ,.time=250,.tonality=450}
+    {.action=ACTION::FORWARD,.distance=10,.speed=100},
+    {.action=ACTION::WAIT,.time=2},
+    {.action=ACTION::TURN,.angle=90}
 };
 int actionIndex=0;
 enum struct STATE{
