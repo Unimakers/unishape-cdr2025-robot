@@ -5,7 +5,7 @@
 #endif
 
 #define TEAM_NAME "UniGaffer"
-#define TEST_PAMI_MODE true
+#define TEST_PAMI_MODE false
 
 namespace PIN
 {

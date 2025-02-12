@@ -23,16 +23,24 @@ typedef struct {
 
 float Waitstart = 0 ;
 bool actionfinished(ActionItem action){
+<<<<<<< HEAD
 if (action.action == ACTION::WAIT){
     if (millis()>Waitstart+action.time*1000)
     return true;
     else {
         return false ;
+=======
+    if (action.action == ACTION::WAIT){
+        if (millis()>Waitstart+action.time*1000)
+        return true;
+        else {
+            return false ;
+        }
     }
-}
-else{
-    return robot.reachedTarget();
-}
+    else{
+        return robot.reachedTarget();
+>>>>>>> b560f2e067bb0cddc93ce320dc14c648958810ef
+    }
 }
 
 bool callAction(ActionItem action){
@@ -60,8 +68,6 @@ bool callAction(ActionItem action){
             return robot.resume();
             break;
         case ACTION::WAIT:
-        // if mill
-            //delay(action.time);
             return true;
             break;
         case ACTION::BUZZ: 
