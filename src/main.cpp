@@ -6,13 +6,12 @@ RobotMove robot;
 enum struct ACTION{
     FORWARD,
     BACKWARD,
-    TURN, //tourne 
-    
+    TURN, //tourne retation relative 
     TURNTO, // tourne jusqu'a votre un angle donnée
     MOVETO, 
-    PAUSE,
+    PAUSE, // arret des mouvement 
     RESUME,
-    WAIT,
+    WAIT, // attendre  un certains temps des ordre du h
     BUZZ
 };
 
@@ -72,8 +71,9 @@ bool callAction(ActionItem action){
     }
 }
 
-typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT];
+typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT]; // attention au deux type d'actions/Actions/ACTION
 Actions actions = {
+    // liste des action que fera le robot
     // {.action=ACTION::MOVETO,.speed=100,.target={100,100,0}} 
     {.action=ACTION::BUZZ,.time=250,.tonality=450},
     {.action=ACTION::WAIT,.time=10},
@@ -84,7 +84,7 @@ enum struct STATE{
     INITIALIZING,
     IDLE,
     RUNNING,
-    PAUSED // paused by security and not by external event => paused non programmed in action list (e.g. lidar detects obstacle)
+    PAUSED // paused by security and not by external event => pausn  ed non programmed in action list (e.g. lidar detects obstacle)
 };
 STATE state=STATE::INITIALIZING;
 // put function declarations here:
