@@ -6,7 +6,7 @@
 
 #define TEAM_NAME "UniGaffer"
 // 0 = UNISHAPE, 1= PAMITEST, 2= UNIWIP
-#define TEST_ROBOT_MODE 2
+#define TEST_ROBOT_MODE 0
 
 namespace PIN
 {
