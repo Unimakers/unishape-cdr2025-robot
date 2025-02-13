@@ -17,9 +17,9 @@ typedef struct {
     int right;
 } ActionDistance;
 typedef struct {
-    int step;
-    bool isMoveTo;
-    Coord target;
+    int step;// current step
+    bool isMoveTo; // is move to or no ?
+    Coord target; // the target
 };
 class RobotMove
 {
