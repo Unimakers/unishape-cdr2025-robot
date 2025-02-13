@@ -84,7 +84,7 @@ enum struct STATE{
     INITIALIZING,
     IDLE,
     RUNNING,
-    PAUSED // paused by security and not by external event => pausn  ed non programmed in action list (e.g. lidar detects obstacle)
+    PAUSED // paused by security and not by external event => pause non programmed in action list (e.g. lidar detects obstacle)
 };
 STATE state=STATE::INITIALIZING;
 // put function declarations here:
