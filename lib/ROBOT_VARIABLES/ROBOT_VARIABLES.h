@@ -36,6 +36,9 @@ namespace PIN
             RIGHT_ENABLE = 7;
 #endif
     }
+    namespace LIDAR{
+
+    }
     namespace DIVERS
     {
         constexpr int
