@@ -5,8 +5,8 @@
 #endif
 
 #define TEAM_NAME "UniGaffer"
-// 0 = UNISHAPE, 1= PAMITEST, 2= UNIWIP , 3 = DEBUGMODE 
-#define TEST_ROBOT_MODE 2
+// 0 = UNISHAPE, 1= PAMITEST, 2= UNIWIP
+#define TEST_ROBOT_MODE 0
 
 namespace PIN
 {
@@ -35,6 +35,9 @@ namespace PIN
             LEFT_ENABLE = 6,
             RIGHT_ENABLE = 7;
 #endif
+    }
+    namespace LIDAR{
+
     }
     namespace DIVERS
     {
