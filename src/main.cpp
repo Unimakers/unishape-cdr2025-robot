@@ -1,10 +1,8 @@
 #include <Arduino.h>
 #include <RobotMove.hpp>
-#include <RPLidar.h>
+#include <lidar.c++>
 
 RobotMove robot;
-HardwareSerial lidarSerial(1);
-RPLidar lidar;
 
 enum struct ACTION
 {
@@ -100,14 +98,7 @@ enum struct STATE
 };
 STATE state = STATE::INITIALIZING;
 
-bool getLidarObstacle()
-{
-    bool obstacle = false;
-    if (IS_OK(lidar.waitPoint()))
-    {
-        RPLidarMeasurement point = lidar.getCurrentPoint();
-    }
-}
+
 
 // put function declarations here:
 void waitTirette()
@@ -127,34 +118,6 @@ void waitTirette()
     delay(1000);
     tone(12, 175, 250);
 }
-typedef struct
-{
-    float distance = 0;
-    float angle = 0;
-    float quality = 0;
-} LIDAR_MESURE_RES;
-
-LIDAR_MESURE_RES mesure;
-bool angleInRange(){
-    return (mesure.angle >= 270 && mesure.angle <= 360)|| (mesure.angle >= 120 && mesure.angle <= 180)|| (mesure.angle >= 0 && mesure.angle <= 45);
-}
-void get_point_lidar()
-{
-    if (IS_OK(lidar.waitPoint()))
-    {
-        mesure.angle = lidar.getCurrentPoint().angle;
-        if(angleInRange()){
-            
-        }
-    }
-}
-void LidarTask(void *pvParameters)
-{
-    for (;;)
-    {
-        get_point_lidar();
-    }
-}
 // int startTime=0;
 void setup()
 {
@@ -163,7 +126,7 @@ void setup()
     Serial.println("Préinitialisation");
     tone(12, 444, 250);
     // lidarSerial.begin(115200, 134217756U, RX, TX);
-    lidar.begin(lidarSerial);
+    
     delay(500);
     pinMode(PIN::DIVERS::TIRETTE, INPUT_PULLUP);
     tone(12, 300, 250);
@@ -171,7 +134,6 @@ void setup()
     robot.resume();
     robot.printHello();
     Serial.println("Fin initialisation");
-    xTaskCreatePinnedToCore(LidarTask, "lidarTask", 10000, NULL, 0, NULL, 0);
     state = STATE::IDLE;
     robot.setCurrentCoords(Coord{0, 0, 0});
     // startTime= millis();
