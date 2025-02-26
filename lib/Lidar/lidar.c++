@@ -1,9 +1,18 @@
 #include <Arduino.h>
 #include <RPLidar.h>
 
+
+TaskHandle_t task0Handle;
+
 RPLidar lidar;
 
 HardwareSerial lidarSerial(1);
+
+static portMUX_TYPE my_spinlock = portMUX_INITIALIZER_UNLOCKED;
+
+bool lidarHasObstaclePiped = false;
+
+bool lidarHasObstacle = false;
 
 typedef struct
 {
@@ -36,6 +45,8 @@ void LidarTask(void *pvParameters)
 
 void init(){
     lidar.begin(lidarSerial);
-    xTaskCreatePinnedToCore(LidarTask, "lidarTask", 10000, NULL, 0, NULL, 0);
-
+    xTaskCreatePinnedToCore(LidarTask, "lidarTask", 10000, NULL, 0, &task0Handle, 0);
+}
+bool getLidarStatus(){
+    
 }
