@@ -37,7 +37,6 @@ namespace PIN
 #endif
     }
     namespace LIDAR{
-
     }
     namespace DIVERS
     {
