@@ -3,6 +3,8 @@
 
 RPLidar lidar;
 
+int DIST_OBSTACLE = 550;
+
 HardwareSerial lidarSerial(1);
 
 typedef struct
@@ -38,4 +40,19 @@ void init(){
     lidar.begin(lidarSerial);
     xTaskCreatePinnedToCore(LidarTask, "lidarTask", 10000, NULL, 0, NULL, 0);
 
+}
+
+bool Angle_in_range_scare(){
+    if (mesure.angle >= 300 && mesure.angle <= 360)
+    {
+      if (mesure.distance < DIST_OBSTACLE/sin(mesure.angle))
+      {
+        return true;
+      }
+    }
+    return false;
+}
+
+void obstacle(){
+    
 }
