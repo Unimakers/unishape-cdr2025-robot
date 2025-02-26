@@ -20,6 +20,20 @@ void RobotMove::printHello(){
 /// @return true if the robot has reached the target else false
 bool RobotMove::reachedTarget(){
     if(left.distanceToGo() == 0 && right.distanceToGo() == 0){
+        switch (currentActionMoveTo.step)
+        {
+        case MoveToState::FIRST_TURN:
+            currentActionMoveTo.step=MoveToState::MOVE;
+            break;
+        case MoveToState::MOVE:
+            currentActionMoveTo.step=MoveToState::LAST_TURN;
+        default:
+            currentActionMoveTo.step=MoveToState::INACTIVE;
+            break;
+        }
+        if(currentActionMoveTo.step!=MoveToState::INACTIVE){
+            return false;
+        }
         return true;
     }
     return false;
@@ -63,8 +77,11 @@ bool RobotMove::moveTo(Coord target, int speed){
     int distance = sqrt(x*x + y*y);
     float angle = atan2(y,x);
     turnTo(angle);
-    forward(distance, speed);
-    turnTo(target.angle);
+    currentActionMoveTo.step=MoveToState::FIRST_TURN;
+    currentActionMoveTo.target=target;
+    currentActionMoveTo.speed=speed;
+    // forward(distance, speed);
+    // turnTo(target.angle);
     return true;
 }
 

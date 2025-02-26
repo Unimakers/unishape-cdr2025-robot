@@ -16,8 +16,16 @@ typedef struct {
     int left;
     int right;
 } ActionDistance;
+
+enum  struct  MoveToState{
+    INACTIVE,
+    FIRST_TURN,
+    MOVE,
+    LAST_TURN
+};
 typedef struct {
-    int step;// current step
+    MoveToState step;
+    int speed;// current step
     Coord target; // the target
 }ActionMoveTo;
 class RobotMove
