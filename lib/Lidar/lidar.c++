@@ -53,6 +53,5 @@ bool Angle_in_range_scare(){
     return false;
 }
 
-void obstacle(){
-    
+void obstacle(){ 
 }
