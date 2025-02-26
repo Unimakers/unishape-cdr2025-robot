@@ -144,7 +144,7 @@ void get_point_lidar()
     {
         mesure.angle = lidar.getCurrentPoint().angle;
         if(angleInRange()){
-
+            
         }
     }
 }
