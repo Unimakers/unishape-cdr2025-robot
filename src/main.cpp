@@ -14,7 +14,7 @@ enum struct ACTION
     PAUSE, // arret des mouvement
     RESUME,
     WAIT, // attendre  un certains temps des ordre du h
-    BUZZ
+    BUZZ 
 };
 
 typedef struct
@@ -125,6 +125,7 @@ void setup()
     delay(1000);
     Serial.println("Préinitialisation");
     tone(12, 444, 250);
+    initLidar();
     // lidarSerial.begin(115200, 134217756U, RX, TX);
     
     delay(500);
@@ -140,6 +141,9 @@ void setup()
 }
 void loop()
 {
+    if(getLidarStatus()){
+        state= STATE::PAUSED;
+    }
     robot.Run();
     if (actionfinished(actions[actionIndex]) && state == STATE::RUNNING)
     {
