@@ -7,6 +7,7 @@ RPLidar lidar;
 
 int DIST_OBSTACLE = 550;
 int QUALITY = 14;
+int MEAN_ALLOWED=2;
 
 HardwareSerial lidarSerial(1);
 
@@ -18,7 +19,9 @@ bool lidarHasObstacle = false;
 
 float prevAngle = 0.0;
 int sumPoints = 0;
+int countPoints=0;
 
+// FONCTION COEUR 0 (COUEUR LIDAR)
 typedef struct
 {
     float distance = 0;
@@ -27,10 +30,12 @@ typedef struct
 } LIDAR_MESURE_RES;
 
 LIDAR_MESURE_RES mesure;
+// FONCTION COEUR 0 (COUEUR LIDAR)
 bool angleInRange()
 {
     return (mesure.angle >= 270 && mesure.angle <= 360) || (mesure.angle >= 120 && mesure.angle <= 180) || (mesure.angle >= 0 && mesure.angle <= 45);
 }
+// FONCTION COEUR 0 (COUEUR LIDAR)
 void get_point_lidar()
 {
     if (IS_OK(lidar.waitPoint()))
@@ -38,13 +43,23 @@ void get_point_lidar()
         mesure.angle = lidar.getCurrentPoint().angle;
         if (angleInRange())
         {
+            if(prevAngle>mesure.angle){
+                if((sumPoints/countPoints)<MEAN_ALLOWED){
+                    sendObstacleData(false);
+                }
+                sumPoints=0;
+                countPoints=0;
+            }
             mesure.distance = lidar.getCurrentPoint().distance; // distance value in mm unit
             mesure.quality = lidar.getCurrentPoint().quality;
+            prevAngle=mesure.angle;
+            countPoints++;
             if (mesure.quality > QUALITY)
             {
                 if (obstacle())
                 {
-                    
+                    sumPoints++;
+                    sendObstacleData(true);
                 }
             }
             else
@@ -54,6 +69,7 @@ void get_point_lidar()
         }
     }
 }
+// FONCTION COEUR 0 (COUEUR LIDAR)
 void LidarTask(void *pvParameters)
 {
     for (;;)
@@ -62,13 +78,28 @@ void LidarTask(void *pvParameters)
     }
 }
 
-void init()
+// FONCTION A EXECUTER COTE COEUR 1 (COEUR DE MOUVEMENT)
+void initLidar()
 {
     lidar.begin(lidarSerial);
     xTaskCreatePinnedToCore(LidarTask, "lidarTask", 10000, NULL, 0, NULL, 0);
 }
-bool getLidarStatus() {}
 
+// FONCTION COEUR 0 (COUEUR LIDAR)
+void sendObstacleData(bool obstacleVal){
+    taskENTER_CRITICAL(&my_spinlock);
+    lidarHasObstaclePiped=obstacleVal;
+    taskEXIT_CRITICAL(&my_spinlock);
+}
+
+// FONCTION A EXECUTER COTE COEUR 1 (COEUR DE MOUVEMENT)
+bool getLidarStatus() {
+    taskENTER_CRITICAL(&my_spinlock);
+    lidarHasObstacle=lidarHasObstaclePiped;
+    taskEXIT_CRITICAL(&my_spinlock);
+    return lidarHasObstacle;
+}
+// FONCTION COEUR 0 (COUEUR LIDAR)
 bool Angle_in_range_scare()
 {
     if (mesure.angle >= 300 && mesure.angle <= 360)
@@ -80,7 +111,7 @@ bool Angle_in_range_scare()
     }
     return false;
 }
-
+// FONCTION COEUR 0 (COUEUR LIDAR)
 bool obstacle()
 {
     if (mesure.distance < DIST_OBSTACLE && mesure.distance > 10)
@@ -92,6 +123,7 @@ bool obstacle()
         return false;
     }
 }
+// FONCTION COEUR 0 (COUEUR LIDAR)
 void reset_point()
 {
     mesure.distance = 0;
