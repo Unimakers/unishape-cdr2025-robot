@@ -11,7 +11,7 @@ int DIST_OBSTACLE = 550;
 HardwareSerial lidarSerial(1);
 
 static portMUX_TYPE my_spinlock = portMUX_INITIALIZER_UNLOCKED;
-
+   
 bool lidarHasObstaclePiped = false;
 
 bool lidarHasObstacle = false;
@@ -62,5 +62,5 @@ bool Angle_in_range_scare(){
     return false;
 }
 
-void obstacle(){ 
+void obstacle(){  
 }
