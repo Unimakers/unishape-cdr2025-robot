@@ -17,7 +17,7 @@ bool lidarHasObstaclePiped = false;
 bool lidarHasObstacle = false;
 
 float prevAngle = 0.0;
-int sumPoints=0;
+int sumPoints = 0;
 
 typedef struct
 {
@@ -38,20 +38,18 @@ void get_point_lidar()
         mesure.angle = lidar.getCurrentPoint().angle;
         if (angleInRange())
         {
-            if (angleInRange())
+            mesure.distance = lidar.getCurrentPoint().distance; // distance value in mm unit
+            mesure.quality = lidar.getCurrentPoint().quality;
+            if (mesure.quality > QUALITY)
             {
-                mesure.distance = lidar.getCurrentPoint().distance; // distance value in mm unit
-                mesure.quality = lidar.getCurrentPoint().quality;
-                if (mesure.quality > QUALITY)
+                if (obstacle())
                 {
-                    if(obstacle()){
-                        
-                    }
+                    
                 }
-                else
-                {
-                    reset_point();
-                }
+            }
+            else
+            {
+                reset_point();
             }
         }
     }
@@ -82,7 +80,6 @@ bool Angle_in_range_scare()
     }
     return false;
 }
-
 
 bool obstacle()
 {
