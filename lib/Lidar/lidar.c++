@@ -102,14 +102,7 @@ bool getLidarStatus() {
 // FONCTION COEUR 0 (COUEUR LIDAR)
 bool Angle_in_range_scare()
 {
-    if (mesure.angle >= 300 && mesure.angle <= 360)
-    {
-        if (mesure.distance < DIST_OBSTACLE / sin(mesure.angle))
-        {
-            return true;
-        }
-    }
-    return false;
+    return (mesure.angle >= 300 && mesure.angle <= 360)and(mesure.distance < DIST_OBSTACLE / sin(mesure.angle));
 }
 // FONCTION COEUR 0 (COUEUR LIDAR)
 bool obstacle()
