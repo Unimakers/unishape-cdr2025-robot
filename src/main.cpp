@@ -14,7 +14,7 @@ enum struct ACTION
     PAUSE, // arret des mouvement
     RESUME,
     WAIT, // attendre  un certains temps des ordre du h
-    BUZZ 
+    BUZZ
 };
 
 typedef struct
@@ -98,8 +98,6 @@ enum struct STATE
 };
 STATE state = STATE::INITIALIZING;
 
-
-
 // put function declarations here:
 void waitTirette()
 {
@@ -127,7 +125,7 @@ void setup()
     tone(12, 444, 250);
     initLidar();
     // lidarSerial.begin(115200, 134217756U, RX, TX);
-    
+
     delay(500);
     pinMode(PIN::DIVERS::TIRETTE, INPUT_PULLUP);
     tone(12, 300, 250);
@@ -141,13 +139,21 @@ void setup()
 }
 void loop()
 {
-    if(getLidarStatus()){
-        state= STATE::PAUSED;
-    }
-    robot.Run();
-    if (actionfinished(actions[actionIndex]) && state == STATE::RUNNING)
+    if (getLidarStatus())
     {
-        state = STATE::IDLE;
+        state = STATE::PAUSED;
+    }
+
+    if (state == STATE::RUNNING)
+    {
+        if (actionfinished(actions[actionIndex]) && state == STATE::RUNNING)
+          {
+            state = STATE::IDLE;
+        }
+        else
+        {
+            robot.Run();
+        }
     }
     if (state == STATE::IDLE)
     {
