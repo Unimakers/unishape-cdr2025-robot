@@ -24,9 +24,12 @@ bool RobotMove::reachedTarget(){
         {
         case MoveToState::FIRST_TURN:
             currentActionMoveTo.step=MoveToState::MOVE;
+            handleMoveTo();
             break;
         case MoveToState::MOVE:
             currentActionMoveTo.step=MoveToState::LAST_TURN;
+            handleMoveTo();
+            break;
         default:
             currentActionMoveTo.step=MoveToState::INACTIVE;
             break;
@@ -38,6 +41,24 @@ bool RobotMove::reachedTarget(){
     }
     return false;
 }
+
+bool RobotMove::handleMoveTo(){
+    if(paused){
+        return false;
+    }
+    int x = currentActionMoveTo.target.x - currentPos.x;
+    int y = currentActionMoveTo.target.y - currentPos.y;
+    int distance = sqrt(x*x + y*y);
+    float angle = atan2(y,x);
+    if(currentActionMoveTo.step==MoveToState::MOVE){
+        forward(distance, currentActionMoveTo.speed);
+    }
+    if(currentActionMoveTo.step==MoveToState::LAST_TURN){
+        turnTo(currentActionMoveTo.target.angle);
+    }
+    return true;
+}
+
 /// @brief  go forward for a distance in mm with a speed in mm/s
 /// @param distance 
 /// @param speed 
@@ -84,7 +105,9 @@ bool RobotMove::moveTo(Coord target, int speed){
     // turnTo(target.angle);
     return true;
 }
-
+void handleMoveTo(){
+    
+}
 /// @brief pause the robot
 /// @return true
 bool RobotMove::pause(){
