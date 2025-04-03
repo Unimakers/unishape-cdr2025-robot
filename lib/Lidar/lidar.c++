@@ -16,7 +16,9 @@ static portMUX_TYPE my_spinlock = portMUX_INITIALIZER_UNLOCKED;
 bool lidarHasObstaclePiped = false;
 
 bool lidarHasObstacle = false;
-
+void sendObstacleData(bool);
+bool obstacle();
+void reset_point();
 float prevAngle = 0.0;
 int sumPoints = 0;
 int countPoints=0;
