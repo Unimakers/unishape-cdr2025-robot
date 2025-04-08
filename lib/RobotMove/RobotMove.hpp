@@ -26,7 +26,7 @@ enum  struct  MoveToState{
 typedef struct {
     MoveToState step;
     int speed;// current step
-    Coord target; // the target
+    Coord target; // the target   
 }ActionMoveTo;
 class RobotMove
 {
