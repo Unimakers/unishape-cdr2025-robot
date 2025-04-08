@@ -36,7 +36,19 @@ namespace PIN
             RIGHT_ENABLE = 7;
 #endif
     }
-    namespace LIDAR{
+    namespace LIDAR
+    {
+    }
+    namespace ACTIONNEUR
+    {
+        namespace SERVO_PCA9685
+        {
+            constexpr int SERVO_LL = 1,
+                          SERVO_LR = 2,
+                          SERVO_RL = 3,
+                          SERVO_RR = 4,
+                          SERVO_LIFT = 5;
+        }
     }
     namespace DIVERS
     {
