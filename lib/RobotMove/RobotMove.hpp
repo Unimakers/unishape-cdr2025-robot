@@ -6,51 +6,57 @@
 #define ROBOTMOVE_H
 #endif
 
-typedef struct {
+typedef struct
+{
     int x;
     int y;
     float angle;
-}Coord;
+} Coord;
 
-typedef struct {
+typedef struct
+{
     int left;
     int right;
 } ActionDistance;
 
-enum  struct  MoveToState{
+enum struct MoveToState
+{
     INACTIVE,
     FIRST_TURN,
     MOVE,
     LAST_TURN
 };
-typedef struct {
+typedef struct
+{
     MoveToState step;
     int speed;// current step
-    Coord target; // the target   
+    Coord target; // the target
 }ActionMoveTo;
 class RobotMove
 {
-    protected:
+protected:
     AccelStepper left, right;
     ActionDistance currentAction;
-    ActionMoveTo currentActionMoveTo; 
-    bool paused=true;
+    ActionMoveTo currentActionMoveTo;
+    bool paused = true;
 
-    public:
+public:
     Coord currentPos;
-    bool forward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
-    bool backward(int distance, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED){
+    bool forward(int distance, int speed = ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
+    bool backward(int distance, int speed = ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED)
+    {
         return forward(-distance, speed);
     }
+    bool handleMoveTo();
     void printHello();
-    bool turn(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
-    bool turnTo(int angle, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
-    bool moveTo(Coord target, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
+    bool turn(int angle, int speed = ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
+    bool turnTo(int angle, int speed = ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
+    bool moveTo(Coord target, int speed = ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
     bool reachedTarget();
     bool pause();
     bool resume();
     bool reset();
-    void setCurrentCoords(int x,int y, float angle);
+    void setCurrentCoords(int x, int y, float angle);
     void setCurrentCoords(Coord c);
     Coord getCurrentCoords();
     void checkPosition();
@@ -60,4 +66,3 @@ class RobotMove
 
     RobotMove();
 };
-
