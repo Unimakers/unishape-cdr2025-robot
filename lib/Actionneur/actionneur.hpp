@@ -10,7 +10,7 @@
 class Actionneur
 {
     protected:
-        int servoLL,servoLR,servoRL,servoRR, servoLift;
+        int servoL,servoR, servoLiftL, servoLiftR;
         Adafruit_PWMServoDriver pca;
     public:
         Actionneur();

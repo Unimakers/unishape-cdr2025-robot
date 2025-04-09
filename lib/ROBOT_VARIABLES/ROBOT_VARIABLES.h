@@ -43,11 +43,10 @@ namespace PIN
     {
         namespace SERVO_PCA9685
         {
-            constexpr int SERVO_LL = 1,
-                          SERVO_LR = 2,
-                          SERVO_RL = 3,
-                          SERVO_RR = 4,
-                          SERVO_LIFT = 5;
+            constexpr int SERVO_L = 0,
+                          SERVO_R = 1,
+                          SERVO_LIFT_L = 2,
+                          SERVO_LIFT_R = 3;
         }
     }
     namespace DIVERS
