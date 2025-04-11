@@ -1,5 +1,6 @@
 #include <RobotMove.hpp>
 #include <actionneur.hpp>
+#include <vector>
 class ActionHandle
 {
 protected:
@@ -32,7 +33,7 @@ public:
         int distance, speed, angle, time, tonality;
         Coord target;
     } ActionItem;
-    typedef ActionItem Actions[DEV_VARIABLES::MAX_ACTION_AMOUNT];
+    typedef std::vector<ActionItem> Actions;
     enum struct STATE
     {
         INITIALIZING,
@@ -42,7 +43,7 @@ public:
     };
     STATE state = STATE::INITIALIZING;
     Actions actions;
-    ActionHandle(RobotMove robot, Actionneur actionneur);
+    ActionHandle();
     void waitTirette();
     bool actionfinished(ActionItem action);
     bool callAction(ActionItem action);
@@ -51,4 +52,6 @@ public:
     void actionLoop();
     ActionItem getAction(int index);
     ActionItem getCurrentAction();
+    void addAction(ActionItem action);
+    void addActionEasy(ACTION action,ActionItem actionvar={});
 };
