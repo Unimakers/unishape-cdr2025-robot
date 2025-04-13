@@ -4,10 +4,10 @@
 
 
 
-ActionHandle::ActionHandle(RobotMove robot, Actionneur actionneur)
+ActionHandle::ActionHandle()
 {
-    this->robot = robot;
-    this->actionneur = actionneur;
+    this->robot = RobotMove();
+    this->actionneur = Actionneur();
     this->Waitstart = 0;
     this->actionIndex = 0;
     this->state = STATE::INITIALIZING;
@@ -144,4 +144,17 @@ ActionHandle::ActionItem ActionHandle::getAction(int index){
 }
 ActionHandle::ActionItem ActionHandle::getCurrentAction(){
     return this->actions[this->actionIndex];
+}
+void ActionHandle::addAction(ActionItem action){
+    this->actions.push_back(action);
+}
+void ActionHandle::addActionEasy(ACTION action,ActionItem actionvar){
+    ActionItem newAction;
+    newAction.action = action;
+    newAction.distance = actionvar.distance;
+    newAction.speed = actionvar.speed;
+    newAction.angle = actionvar.angle;
+    newAction.time = actionvar.time;
+    newAction.target = actionvar.target;
+    this->actions.push_back(newAction);
 }

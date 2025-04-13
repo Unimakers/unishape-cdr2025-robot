@@ -36,3 +36,14 @@ unsigned int deg2ms(unsigned int degree)
 {
     return map(degree, 0,180,1000,2000);
 }
+
+void Actionneur::relacher()
+{
+    pca.writeMicroseconds(servoL,deg2ms(0));
+    pca.writeMicroseconds(servoR,deg2ms(0));
+}
+
+void Actionneur::descendre(){
+    pca.writeMicroseconds(servoLiftL, deg2ms(0));
+    pca.writeMicroseconds(servoLiftR, deg2ms(0));
+}

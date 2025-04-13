@@ -4,8 +4,7 @@
 #include <actionneur.hpp>
 #include <ActionHandle.hpp>
 
-RobotMove robot;
-Actionneur actionneur;
+
 ActionHandle actionHandle;
 
 
