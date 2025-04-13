@@ -17,9 +17,7 @@ void setup()
     Serial.begin(115200);
     delay(1000);
     Serial.println("Préinitialisation");
-    robot = RobotMove();
-    actionneur = Actionneur();
-    actionHandle = ActionHandle(robot,actionneur);
+    actionHandle = ActionHandle();
     tone(12, 444, 250);
     initLidar();
     // lidarSerial.begin(115200, 134217756U, RX, TX);
@@ -28,11 +26,9 @@ void setup()
     pinMode(PIN::DIVERS::TIRETTE, INPUT_PULLUP);
     tone(12, 300, 250);
     actionHandle.waitTirette();
-    robot.resume();
-    robot.printHello();
+    actionHandle.initRobot();
     Serial.println("Fin initialisation");
     actionHandle.setState(ActionHandle::STATE::IDLE);
-    robot.setCurrentCoords(Coord{0, 0, 0});
     // startTime= millis();
 }
 void loop()

@@ -13,7 +13,10 @@ ActionHandle::ActionHandle()
     this->state = STATE::INITIALIZING;
 
 }
-
+void ActionHandle::initRobot(){
+    this->robot.resume();
+    this->robot.printHello();
+}
 
 bool ActionHandle::actionfinished(ActionItem action)
 {

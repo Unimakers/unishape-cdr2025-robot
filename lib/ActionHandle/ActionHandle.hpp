@@ -54,4 +54,5 @@ public:
     ActionItem getCurrentAction();
     void addAction(ActionItem action);
     void addActionEasy(ACTION action,ActionItem actionvar={});
+    void initRobot();
 };
