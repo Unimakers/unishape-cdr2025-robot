@@ -5,6 +5,7 @@ class ActionList
     protected:
     ActionHandle::Actions actions;
     public:
+    ActionList();
     void NAction(ACT action, ActionHandle::ActionItem actionvar){
         ActionHandle::ActionItem actionItem;
         actionItem.action = action;
@@ -24,3 +25,6 @@ class ActionList
     }
     void strat();
 };
+ActionList::ActionList(){
+    
+}

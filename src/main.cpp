@@ -3,6 +3,7 @@
 #include <lidar.c++>
 #include <actionneur.hpp>
 #include <ActionHandle.hpp>
+#include <actionListes.hpp>
 
 
 ActionHandle actionHandle;
@@ -18,6 +19,8 @@ void setup()
     delay(1000);
     Serial.println("Préinitialisation");
     actionHandle = ActionHandle();
+    ActionList actionList = ActionList();
+    actionList.pushAction(actionHandle);
     tone(12, 444, 250);
     initLidar();
     // lidarSerial.begin(115200, 134217756U, RX, TX);
