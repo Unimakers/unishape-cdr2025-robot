@@ -2,6 +2,8 @@
 #include "ROBOT_VARIABLES.h"
 #include <AccelStepper.h>
 #include <Adafruit_PWMServoDriver.h>
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 #ifndef ACTIONNEUR_H
 #define ACTIONNEUR_H
 #endif

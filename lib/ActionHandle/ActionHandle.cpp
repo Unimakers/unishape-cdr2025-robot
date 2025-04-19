@@ -1,6 +1,4 @@
 #include <ActionHandle.hpp>
-#include <Arduino.h>
-#include <ROBOT_VARIABLES.h>
 
 
 
@@ -12,6 +10,9 @@ ActionHandle::ActionHandle()
     this->actionIndex = 0;
     this->state = STATE::INITIALIZING;
 
+}
+ActionHandle::STATE ActionHandle::getState(){
+    return this->state;
 }
 void ActionHandle::initRobot(){
     this->robot.resume();
@@ -160,4 +161,7 @@ void ActionHandle::addActionEasy(ACTION action,ActionItem actionvar){
     newAction.time = actionvar.time;
     newAction.target = actionvar.target;
     this->actions.push_back(newAction);
+}
+void ActionHandle::setRobotCoord(Coord coord){
+    this->robot.setCurrentCoords(coord);
 }

@@ -28,12 +28,12 @@ namespace PIN
             LEFT_ENABLE = 46,
             RIGHT_ENABLE = 46;
 #else
-            LEFT_STEP = 2,
-            RIGHT_STEP = 3,
-            LEFT_DIR = 4,
-            RIGHT_DIR = 5,
-            LEFT_ENABLE = 6,
-            RIGHT_ENABLE = 7;
+            LEFT_STEP = 14,
+            RIGHT_STEP = 12,
+            LEFT_DIR = 13,
+            RIGHT_DIR = 11,
+            LEFT_ENABLE = 46,
+            RIGHT_ENABLE = 46;
 #endif
     }
     namespace LIDAR

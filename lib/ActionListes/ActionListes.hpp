@@ -1,13 +1,21 @@
-#include <ActionHandle.hpp>
+#pragma once
+#ifndef ACTION_LISTE_H
+#define ACTION_LISTE_H
+#endif
+#include "ActionHandle.hpp"
 #define ACT ActionHandle::ACTION
 class ActionList
 {
     protected:
     ActionHandle::Actions actions;
+    typedef struct {
+        int distance, speed, angle, time, tonality;
+        Coord target;
+    } ActVar;
     bool teamBlue = true;
     public:
-    ActionList();
-    void NAction(ACT action, ActionHandle::ActionItem actionvar){
+    ActionList(){};
+    void NAction(ACT action, ActVar actionvar){
         ActionHandle::ActionItem actionItem;
         actionItem.action = action;
         actionItem.distance = actionvar.distance;
@@ -29,6 +37,3 @@ class ActionList
     void initialCoord(ActionHandle actionHandle);
     void strat();
 };
-ActionList::ActionList(){
-    
-}

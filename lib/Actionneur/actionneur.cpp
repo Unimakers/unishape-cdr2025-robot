@@ -1,6 +1,5 @@
 #include <actionneur.hpp>
-#include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
+
 
 /*
 ----------ACTIONNEUR----------
@@ -8,7 +7,10 @@ servoLL , servoLR, servoRL, servoRR
            servoLift
 ------------------------------
 */
-
+unsigned int deg2ms(unsigned int degree)
+{
+    return map(degree, 0,180,1000,2000);
+}
 Actionneur::Actionneur()
 {
     // pca.writeMicroseconds(servoLL, 1500);
@@ -26,15 +28,11 @@ void Actionneur::monter(){
     pca.writeMicroseconds(servoLiftR, deg2ms(90));
 }
 
-
+void Actionneur::stop(){}
 void Actionneur::pincer()
 {
     pca.writeMicroseconds(servoL,deg2ms(90));
     pca.writeMicroseconds(servoR,deg2ms(90));
-}
-unsigned int deg2ms(unsigned int degree)
-{
-    return map(degree, 0,180,1000,2000);
 }
 
 void Actionneur::relacher()
