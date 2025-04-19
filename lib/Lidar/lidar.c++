@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <RPLidar.h>
 
-TaskHandle_t task0Handle;
+TaskHandle_t Task1;
 
 RPLidar lidar;
 
@@ -76,7 +76,9 @@ void LidarTask(void *pvParameters)
 {
     for (;;)
     {
-        get_point_lidar();
+        Serial.println("hello");
+        delay(200);
+        // get_point_lidar();
     }
 }
 
@@ -84,7 +86,7 @@ void LidarTask(void *pvParameters)
 void initLidar()
 {
     lidar.begin(lidarSerial);
-    xTaskCreatePinnedToCore(LidarTask, "lidarTask", 10000, NULL, 0, NULL, 0);
+    xTaskCreatePinnedToCore(LidarTask, "lidarTask", 10000, NULL, 0, &Task1, 0);
 }
 
 // FONCTION COEUR 0 (COUEUR LIDAR)

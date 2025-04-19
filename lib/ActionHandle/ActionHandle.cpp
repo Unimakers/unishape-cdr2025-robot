@@ -5,7 +5,7 @@
 ActionHandle::ActionHandle()
 {
     this->robot = RobotMove();
-    this->actionneur = Actionneur();
+    // this->actionneur = Actionneur();
     this->Waitstart = 0;
     this->actionIndex = 0;
     this->state = STATE::INITIALIZING;
@@ -69,26 +69,26 @@ bool ActionHandle::callAction(ActionItem action)
         tone(12, action.tonality, action.time);
         return true;
         break;
-    case ACTION::ACTIONNEUR_LIFT_UP:
-        this->actionneur.monter();
-        return true;
-        break;
-    case ACTION::ACTIONNEUR_LIFT_DOWN:
-        this->actionneur.descendre();
-        return true;
-        break;
-    case ACTION::ACTIONNEUR_GRAB:
-        this->actionneur.pincer();
-        return true;
-        break;
-    case ACTION::ACTIONNEUR_RELEASE:
-        this->actionneur.relacher();
-        return true;
-        break;
-    case ACTION::ACTIONNEUR_STOP:
-        this->actionneur.stop();
-        return true;
-        break;
+    // case ACTION::ACTIONNEUR_LIFT_UP:
+    //     this->actionneur.monter();
+    //     return true;
+    //     break;
+    // case ACTION::ACTIONNEUR_LIFT_DOWN:
+    //     this->actionneur.descendre();
+    //     return true;
+    //     break;
+    // case ACTION::ACTIONNEUR_GRAB:
+    //     this->actionneur.pincer();
+    //     return true;
+    //     break;
+    // case ACTION::ACTIONNEUR_RELEASE:
+    //     this->actionneur.relacher();
+    //     return true;
+    //     break;
+    // case ACTION::ACTIONNEUR_STOP:
+    //     this->actionneur.stop();
+    //     return true;
+    //     break;
     default:
         return false;
     }
