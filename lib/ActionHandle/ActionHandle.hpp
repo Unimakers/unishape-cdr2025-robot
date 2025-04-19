@@ -55,4 +55,5 @@ public:
     void addAction(ActionItem action);
     void addActionEasy(ACTION action,ActionItem actionvar={});
     void initRobot();
+    void setRobotCoord(Coord c);
 };

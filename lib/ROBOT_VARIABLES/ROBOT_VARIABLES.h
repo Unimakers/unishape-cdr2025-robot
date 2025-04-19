@@ -57,7 +57,8 @@ namespace PIN
 #elif TEST_ROBOT_MODE == 2
             TIRETTE = 8;
 #else
-            TIRETTE = 8;
+            TIRETTE = 8,
+            TEAM_SWITCH = 1;
 #endif
     }
 } // namespace PIN

@@ -4,6 +4,7 @@ class ActionList
 {
     protected:
     ActionHandle::Actions actions;
+    bool teamBlue = true;
     public:
     ActionList();
     void NAction(ACT action, ActionHandle::ActionItem actionvar){
@@ -17,12 +18,15 @@ class ActionList
         actions.push_back(actionItem);
     }
     void pushAction(ActionHandle actionHandle){
+        this->teamBlue=(bool)digitalRead(PIN::DIVERS::TEAM_SWITCH);
+        initialCoord(actionHandle);
         strat();
         for (auto action : actions)
         {
             actionHandle.addAction(action);
         }
     }
+    void initialCoord(ActionHandle actionHandle);
     void strat();
 };
 ActionList::ActionList(){
