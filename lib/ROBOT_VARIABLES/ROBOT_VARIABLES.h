@@ -38,6 +38,7 @@ namespace PIN
     }
     namespace LIDAR
     {
+        constexpr int PWM = 3;
     }
     namespace ACTIONNEUR
     {

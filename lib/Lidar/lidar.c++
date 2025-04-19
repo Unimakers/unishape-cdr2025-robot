@@ -1,18 +1,19 @@
 #include <Arduino.h>
 #include <RPLidar.h>
-
-TaskHandle_t Task1;
+#include <Wire.h>
+#include <SPI.h>
 
 RPLidar lidar;
+HardwareSerial lidarSerial(1);
+TaskHandle_t Task0;
 
 int DIST_OBSTACLE = 550;
 int QUALITY = 14;
-int MEAN_ALLOWED=2;
+int MEAN_ALLOWED = 2;
 
-HardwareSerial lidarSerial(1);
 
 static portMUX_TYPE my_spinlock = portMUX_INITIALIZER_UNLOCKED;
-   
+
 bool lidarHasObstaclePiped = false;
 
 bool lidarHasObstacle = false;
@@ -21,7 +22,8 @@ bool obstacle();
 void reset_point();
 float prevAngle = 0.0;
 int sumPoints = 0;
-int countPoints=0;
+int countPoints = 0;
+bool lidarInitialized = false;
 
 // FONCTION COEUR 0 (COUEUR LIDAR)
 typedef struct
@@ -45,16 +47,18 @@ void get_point_lidar()
         mesure.angle = lidar.getCurrentPoint().angle;
         if (angleInRange())
         {
-            if(prevAngle>mesure.angle){
-                if((sumPoints/countPoints)<MEAN_ALLOWED){
+            if (prevAngle > mesure.angle)
+            {
+                if ((sumPoints / countPoints) < MEAN_ALLOWED)
+                {
                     sendObstacleData(false);
                 }
-                sumPoints=0;
-                countPoints=0;
+                sumPoints = 0;
+                countPoints = 0;
             }
             mesure.distance = lidar.getCurrentPoint().distance; // distance value in mm unit
             mesure.quality = lidar.getCurrentPoint().quality;
-            prevAngle=mesure.angle;
+            prevAngle = mesure.angle;
             countPoints++;
             if (mesure.quality > QUALITY)
             {
@@ -70,10 +74,40 @@ void get_point_lidar()
             }
         }
     }
+    else
+        {
+            // analogWrite(D0, 0); // stop the rplidar motor
+            Serial.println("Lidar Stopped");
+            // try to detect RPLIDAR...
+            rplidar_response_device_info_t info;
+            if (IS_OK(lidar.getDeviceInfo(info, 100)))
+            {
+                Serial.println("Lidar found");
+                // detected...
+                lidar.startScan();
+                // analogWrite(D0, 150);
+                delay(1000);
+            }
+            else
+            {
+                Serial.println("Lidar not found");
+            }
+        }
+        delay(25);
 }
 // FONCTION COEUR 0 (COUEUR LIDAR)
 void LidarTask(void *pvParameters)
 {
+    if (!lidarInitialized)
+    {
+        
+        taskENTER_CRITICAL(&my_spinlock);
+        lidarInitialized = true;
+        taskEXIT_CRITICAL(&my_spinlock);
+        lidar.begin(lidarSerial);
+        pinMode(PIN::LIDAR::PWM, OUTPUT);
+        analogWrite(PIN::LIDAR::PWM, 150);
+    }
     for (;;)
     {
         Serial.println("hello");
@@ -85,28 +119,32 @@ void LidarTask(void *pvParameters)
 // FONCTION A EXECUTER COTE COEUR 1 (COEUR DE MOUVEMENT)
 void initLidar()
 {
-    lidar.begin(lidarSerial);
-    xTaskCreatePinnedToCore(LidarTask, "lidarTask", 10000, NULL, 0, &Task1, 0);
+    if (!lidarInitialized)
+    {
+        xTaskCreatePinnedToCore(LidarTask,"Task0",1000, NULL, 1, &Task0, 0);
+    }
 }
 
 // FONCTION COEUR 0 (COUEUR LIDAR)
-void sendObstacleData(bool obstacleVal){
+void sendObstacleData(bool obstacleVal)
+{
     taskENTER_CRITICAL(&my_spinlock);
-    lidarHasObstaclePiped=obstacleVal;
+    lidarHasObstaclePiped = obstacleVal;
     taskEXIT_CRITICAL(&my_spinlock);
 }
 
 // FONCTION A EXECUTER COTE COEUR 1 (COEUR DE MOUVEMENT)
-bool getLidarStatus() {
+bool getLidarStatus()
+{
     taskENTER_CRITICAL(&my_spinlock);
-    lidarHasObstacle=lidarHasObstaclePiped;
+    lidarHasObstacle = lidarHasObstaclePiped;
     taskEXIT_CRITICAL(&my_spinlock);
     return lidarHasObstacle;
 }
 // FONCTION COEUR 0 (COUEUR LIDAR)
 bool Angle_in_range_scare()
 {
-    return (mesure.angle >= 300 && mesure.angle <= 360)and(mesure.distance < DIST_OBSTACLE / sin(mesure.angle));
+    return (mesure.angle >= 300 && mesure.angle <= 360) and (mesure.distance < DIST_OBSTACLE / sin(mesure.angle));
 }
 // FONCTION COEUR 0 (COUEUR LIDAR)
 bool obstacle()
