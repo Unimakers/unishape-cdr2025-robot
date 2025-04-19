@@ -1,10 +1,11 @@
 #include <Arduino.h>
+#include <ROBOT_VARIABLES.h>
 #include <RPLidar.h>
 #include <Wire.h>
 #include <SPI.h>
 
 RPLidar lidar;
-HardwareSerial lidarSerial(1);
+HardwareSerial lidarSerial(0);
 TaskHandle_t Task0;
 
 int DIST_OBSTACLE = 550;
@@ -98,16 +99,13 @@ void get_point_lidar()
 // FONCTION COEUR 0 (COUEUR LIDAR)
 void LidarTask(void *pvParameters)
 {
-    if (!lidarInitialized)
-    {
+    // if (!lidarInitialized)
+    // {
         
-        taskENTER_CRITICAL(&my_spinlock);
-        lidarInitialized = true;
-        taskEXIT_CRITICAL(&my_spinlock);
-        lidar.begin(lidarSerial);
-        pinMode(PIN::LIDAR::PWM, OUTPUT);
-        analogWrite(PIN::LIDAR::PWM, 150);
-    }
+    //     // taskENTER_CRITICAL(&my_spinlock);
+    //     // lidarInitialized = true;
+    //     // taskEXIT_CRITICAL(&my_spinlock);
+    // }
     for (;;)
     {
         Serial.println("hello");
@@ -119,10 +117,13 @@ void LidarTask(void *pvParameters)
 // FONCTION A EXECUTER COTE COEUR 1 (COEUR DE MOUVEMENT)
 void initLidar()
 {
-    if (!lidarInitialized)
-    {
+    // if (!lidarInitialized)
+    // {
+        lidar.begin(lidarSerial);
+        pinMode(PIN::LIDAR::PWM, OUTPUT);
+        analogWrite(PIN::LIDAR::PWM, 150);
         xTaskCreatePinnedToCore(LidarTask,"Task0",1000, NULL, 1, &Task0, 0);
-    }
+    // }
 }
 
 // FONCTION COEUR 0 (COUEUR LIDAR)

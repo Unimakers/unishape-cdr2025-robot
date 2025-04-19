@@ -114,10 +114,12 @@ void ActionHandle::setState(STATE state){
     this->state = state;
 }
 void ActionHandle::actionLoop(){
+    Serial.println("entering first step of debug");
     if (getState() == STATE::RUNNING)
     {
+        Serial.println("entering sec1 step of debug");
         if (actionfinished(getCurrentAction()) && getState() == STATE::RUNNING)
-          {
+        {
             setState(STATE::IDLE);
         }
         else
@@ -125,17 +127,22 @@ void ActionHandle::actionLoop(){
             this->robot.Run();
         }
     }
+    Serial.println("entering sec2 step of debug");
     if (getState() == STATE::IDLE)
     {
+        Serial.println("hellow");
+        // Serial.println(DEV_VARIABLES::MAX_ACTION_AMOUNT);
         if (this->actionIndex < DEV_VARIABLES::MAX_ACTION_AMOUNT)
         {
+            Serial.println("helloworld1");
             setState(STATE::RUNNING);
-            bool error = callAction(getCurrentAction());
-            if (!error)
-            {
-                Serial.println("Erreur dans l'action");
-            }
-            this->actionIndex++;
+            Serial.println(getCurrentAction().distance);
+            // bool error = callAction(getCurrentAction());
+            // if (!error)
+            // {
+            //     Serial.println("Erreur dans l'action");
+            // }
+            // this->actionIndex++;
         }
     }
 }
@@ -147,7 +154,7 @@ ActionHandle::ActionItem ActionHandle::getAction(int index){
     return this->actions[index];
 }
 ActionHandle::ActionItem ActionHandle::getCurrentAction(){
-    return this->actions[this->actionIndex];
+    return getAction(this->actionIndex);
 }
 void ActionHandle::addAction(ActionItem action){
     this->actions.push_back(action);
