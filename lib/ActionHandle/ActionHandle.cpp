@@ -132,7 +132,7 @@ void ActionHandle::actionLoop(){
     {
         Serial.println("hellow");
         // Serial.println(DEV_VARIABLES::MAX_ACTION_AMOUNT);
-        if (this->actionIndex < DEV_VARIABLES::MAX_ACTION_AMOUNT)
+        if (this->actionIndex < actions.size())
         {
             Serial.println("helloworld1");
             setState(STATE::RUNNING);
@@ -147,13 +147,15 @@ void ActionHandle::actionLoop(){
     }
 }
 ActionHandle::ActionItem ActionHandle::getAction(int index){
-    if(index < 0 || index >= DEV_VARIABLES::MAX_ACTION_AMOUNT){
+    Serial.println("inside get Sec");
+    if(index < 0 || index >= actions.size()){
         Serial.println("Index out of range");
         return ActionItem{};
     }
     return this->actions[index];
 }
 ActionHandle::ActionItem ActionHandle::getCurrentAction(){
+    Serial.println("inside getCurr");
     return getAction(this->actionIndex);
 }
 void ActionHandle::addAction(ActionItem action){
