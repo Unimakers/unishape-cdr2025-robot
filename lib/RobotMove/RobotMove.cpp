@@ -6,9 +6,7 @@
 RobotMove::RobotMove():left(AccelStepper::DRIVER, PIN::STEPPERS::LEFT_STEP, PIN::STEPPERS::LEFT_DIR), right(AccelStepper::DRIVER, PIN::STEPPERS::RIGHT_STEP, PIN::STEPPERS::RIGHT_DIR)
 {
     pinMode(PIN::STEPPERS::LEFT_ENABLE, OUTPUT);
-    digitalWrite(PIN::STEPPERS::LEFT_ENABLE, HIGH);
-    pinMode(PIN::STEPPERS::RIGHT_ENABLE, OUTPUT);
-    digitalWrite(PIN::STEPPERS::RIGHT_ENABLE, LOW);
+    digitalWrite(PIN::STEPPERS::LEFT_ENABLE, LOW);
     left.setPinsInverted(ROBOT_VARIABLES::STEPPER::LEFT_INVERTED);
     right.setPinsInverted(ROBOT_VARIABLES::STEPPER::RIGHT_INVERTED);
     currentPos = {0,0,0};
