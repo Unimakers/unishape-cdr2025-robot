@@ -3,6 +3,7 @@
 #include <RPLidar.h>
 #include <Wire.h>
 #include <SPI.h>
+#include <string>
 
 RPLidar lidar;
 HardwareSerial lidarSerial(0);
@@ -65,6 +66,9 @@ void get_point_lidar()
             {
                 if (obstacle())
                 {
+                    double xPoint = cos(mesure.angle)*mesure.distance;
+                    double yPoint = sin(mesure.angle)*mesure.distance;
+                    Serial.println(((std::string)">point:"+std::to_string(xPoint)+":"+std::to_string(yPoint)+"|xy").c_str());
                     sumPoints++;
                     sendObstacleData(true);
                 }
@@ -109,8 +113,8 @@ void LidarTask(void *pvParameters)
     for (;;)
     {
         Serial.println("hello");
-        delay(200);
-        // get_point_lidar();
+        get_point_lidar();
+        delay(250);
     }
 }
 

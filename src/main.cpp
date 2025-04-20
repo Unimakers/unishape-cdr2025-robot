@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define BONJOUR 0
+#define BONJOUR 1
 #if BONJOUR == 0
 // DEBUG
 // ça marche pas...
