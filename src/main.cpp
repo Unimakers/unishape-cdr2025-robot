@@ -13,7 +13,7 @@ void setup() {
   rob = RobotMove();
   rob.forward(1000,20);
 }
-
+//DOOOOOODOOOOOOOOOOOOOOOOOOOOO jvais dormir par terre sinon.....
 void loop() {
   Serial.println("Loop running");
   rob.Run();
