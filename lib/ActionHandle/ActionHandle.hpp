@@ -7,6 +7,7 @@
 #include <vector>
 #include <Arduino.h>
 #include "ROBOT_VARIABLES.h"
+#include <string>
 class ActionHandle
 {
 protected:
@@ -62,4 +63,7 @@ public:
     void addActionEasy(ACTION action,ActionItem actionvar={});
     void initRobot();
     void setRobotCoord(Coord c);
+    static std::string debugActionString(ActionItem actItem);
+    static std::string debugActionEnumString(ACTION act);
+    static std::string debugCoordString(Coord c);
 };

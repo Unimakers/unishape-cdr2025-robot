@@ -115,6 +115,7 @@ void ActionHandle::setState(STATE state){
 }
 void ActionHandle::actionLoop(){
     Serial.println("entering first step of debug");
+    Serial.println(((std::string)"Actions is of size: "+std::to_string(actions.size())).c_str());
     if (getState() == STATE::RUNNING)
     {
         Serial.println("entering sec1 step of debug");
@@ -136,13 +137,13 @@ void ActionHandle::actionLoop(){
         {
             Serial.println("helloworld1");
             setState(STATE::RUNNING);
-            Serial.println(getCurrentAction().distance);
-            // bool error = callAction(getCurrentAction());
-            // if (!error)
-            // {
-            //     Serial.println("Erreur dans l'action");
-            // }
-            // this->actionIndex++;
+            // Serial.println(getCurrentAction().distance);
+            bool error = callAction(getCurrentAction());
+            if (!error)
+            {
+                Serial.println("Erreur dans l'action");
+            }
+            this->actionIndex++;
         }
     }
 }
@@ -159,7 +160,10 @@ ActionHandle::ActionItem ActionHandle::getCurrentAction(){
     return getAction(this->actionIndex);
 }
 void ActionHandle::addAction(ActionItem action){
+    Serial.println("wow i receive an action!");
+    Serial.println(debugActionString(action).c_str());
     this->actions.push_back(action);
+    Serial.println(this->actions.size());
 }
 void ActionHandle::addActionEasy(ACTION action,ActionItem actionvar){
     ActionItem newAction;
@@ -169,8 +173,74 @@ void ActionHandle::addActionEasy(ACTION action,ActionItem actionvar){
     newAction.angle = actionvar.angle;
     newAction.time = actionvar.time;
     newAction.target = actionvar.target;
-    this->actions.push_back(newAction);
+    addAction(newAction);
 }
 void ActionHandle::setRobotCoord(Coord coord){
     this->robot.setCurrentCoords(coord);
+}
+std::string ActionHandle::debugActionString(ActionItem actItem){
+    std::string actionStr = debugActionEnumString(actItem.action);
+    return 
+    "ActionItem{\n"
+    "\taction:"+actionStr+"\n"
+    "\tdistance:"+std::to_string(actItem.distance)+"\n"
+    "\tspeed:"+std::to_string(actItem.speed)+"\n"
+    "\tangle:"+std::to_string(actItem.angle)+"\n"
+    "\ttime:"+std::to_string(actItem.time)+"\n"
+    "\ttonality:"+std::to_string(actItem.tonality)+"\n"
+    "\ttarget:"+debugCoordString(actItem.target)+"\n"
+    "}";
+}
+std::string ActionHandle::debugCoordString(Coord c){
+    return "Coord{x="+std::to_string(c.x)+"y="+std::to_string(c.y)+"a="+std::to_string(c.angle)+"}";
+}
+std::string ActionHandle::debugActionEnumString(ACTION act){
+    switch (act)
+    {
+    case ACTION::FORWARD:
+        return "FORWARD";
+        break;
+    case ACTION::BACKWARD:
+        return "BACKWARD";
+        break;
+    case ACTION::TURN:
+        return "TURN";
+        break;
+    case ACTION::TURNTO:
+        return "TURNTO";
+        break;
+    case ACTION::MOVETO:
+        return "MOVETO";
+        break;
+    case ACTION::PAUSE:
+        return "PAUSE";
+        break;
+    case ACTION::RESUME:
+        return "RESUME";
+        break;
+    case ACTION::WAIT:
+        return "WAIT";
+        break;  
+    case ACTION::BUZZ:
+        return "BUZZ";
+        break;
+    case ACTION::ACTIONNEUR_LIFT_UP:
+        return "ACTIONNEUR_LIFT_UP";
+        break;
+    case ACTION::ACTIONNEUR_LIFT_DOWN:
+        return "ACTIONNEUR_LIFT_DOWN";
+        break;
+    case ACTION::ACTIONNEUR_GRAB:
+        return "ACTIONNEUR_GRAB";
+        break;
+    case ACTION::ACTIONNEUR_RELEASE:
+        return "ACTIONNEUR_RELEASE";
+        break;
+    case ACTION::ACTIONNEUR_STOP:
+        return "ACTIONNEUR_STOP";
+        break;
+    default:
+        break;
+    }
+    return "UNKNOWN";
 }
