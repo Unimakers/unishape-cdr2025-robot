@@ -13,7 +13,6 @@ int DIST_OBSTACLE = 550;
 int QUALITY = 14;
 int MEAN_ALLOWED = 2;
 
-
 static portMUX_TYPE my_spinlock = portMUX_INITIALIZER_UNLOCKED;
 
 bool lidarHasObstaclePiped = false;
@@ -44,68 +43,71 @@ bool angleInRange()
 // FONCTION COEUR 0 (COUEUR LIDAR)
 void get_point_lidar()
 {
-    if (IS_OK(lidar.waitPoint()))
-    {
-        mesure.angle = lidar.getCurrentPoint().angle;
-        if (angleInRange())
-        {
-            if (prevAngle > mesure.angle)
-            {
-                if ((sumPoints / countPoints) < MEAN_ALLOWED)
-                {
-                    sendObstacleData(false);
-                }
-                sumPoints = 0;
-                countPoints = 0;
-            }
-            mesure.distance = lidar.getCurrentPoint().distance; // distance value in mm unit
-            mesure.quality = lidar.getCurrentPoint().quality;
-            prevAngle = mesure.angle;
-            countPoints++;
-            if (mesure.quality > QUALITY)
-            {
-                if (obstacle())
-                {
-                    double xPoint = cos(mesure.angle)*mesure.distance;
-                    double yPoint = sin(mesure.angle)*mesure.distance;
-                    Serial.println(((std::string)">point:"+std::to_string(xPoint)+":"+std::to_string(yPoint)+"|xy").c_str());
-                    sumPoints++;
-                    sendObstacleData(true);
-                }
-            }
-            else
-            {
-                reset_point();
-            }
-        }
-    }
-    else
-        {
-            // analogWrite(D0, 0); // stop the rplidar motor
-            Serial.println("Lidar Stopped");
-            // try to detect RPLIDAR...
-            rplidar_response_device_info_t info;
-            if (IS_OK(lidar.getDeviceInfo(info, 100)))
-            {
-                Serial.println("Lidar found");
-                // detected...
-                lidar.startScan();
-                // analogWrite(D0, 150);
-                delay(1000);
-            }
-            else
-            {
-                Serial.println("Lidar not found");
-            }
-        }
-        delay(25);
+    Serial.println("hello111");
+    // BUG HERE v (lidar.waitPoint()) Guru meditation Error Core 0 panic'ed Unhandled debug exception Stack canary watchpoint triggered
+    // if (IS_OK(lidar.waitPoint()))
+    // {
+        // Serial.println("helloooo222");
+    //     mesure.angle = lidar.getCurrentPoint().angle;
+    //     if (angleInRange())
+    //     {
+    //         if (prevAngle > mesure.angle)
+    //         {
+    //             if ((sumPoints / countPoints) < MEAN_ALLOWED)
+    //             {
+    //                 // sendObstacleData(false);
+    //             }
+    //             sumPoints = 0;
+    //             countPoints = 0;
+    //         }
+    //         mesure.distance = lidar.getCurrentPoint().distance; // distance value in mm unit
+    //         mesure.quality = lidar.getCurrentPoint().quality;
+    //         prevAngle = mesure.angle;
+    //         countPoints++;
+    //         if (mesure.quality > QUALITY)
+    //         {
+    //             if (obstacle())
+    //             {
+    //                 double xPoint = cos(mesure.angle) * mesure.distance;
+    //                 double yPoint = sin(mesure.angle) * mesure.distance;
+    //                 Serial.println(((std::string) ">point:" + std::to_string(xPoint) + ":" + std::to_string(yPoint) + "|xy").c_str());
+    //                 sumPoints++;
+    //                 // sendObstacleData(true);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             reset_point();
+    //         }
+    //     }
+    // }
+    // else
+    // {
+    //     // analogWrite(D0, 0); // stop the rplidar motor
+    //     Serial.println("Lidar Stopped");
+    //     // try to detect RPLIDAR...
+    //     rplidar_response_device_info_t info;
+    //     if (IS_OK(lidar.getDeviceInfo(info, 100)))
+    //     {
+    //         Serial.println("Lidar found");
+    //         // detected...
+    //         lidar.startScan();
+    //         // analogWrite(D0, 150);
+    //         delay(1000);
+    //     }
+    //     else
+    //     {
+    //         Serial.println("Lidar not found");
+    //     }
+    // }
+    // delay(25);
 }
 // FONCTION COEUR 0 (COUEUR LIDAR)
 void LidarTask(void *pvParameters)
 {
     // if (!lidarInitialized)
     // {
-        
+
     //     // taskENTER_CRITICAL(&my_spinlock);
     //     // lidarInitialized = true;
     //     // taskEXIT_CRITICAL(&my_spinlock);
@@ -123,10 +125,10 @@ void initLidar()
 {
     // if (!lidarInitialized)
     // {
-        lidar.begin(lidarSerial);
-        pinMode(PIN::LIDAR::PWM, OUTPUT);
-        analogWrite(PIN::LIDAR::PWM, 150);
-        xTaskCreatePinnedToCore(LidarTask,"Task0",1000, NULL, 1, &Task0, 0);
+    lidar.begin(lidarSerial);
+    pinMode(PIN::LIDAR::PWM, OUTPUT);
+    analogWrite(PIN::LIDAR::PWM, 150);
+    xTaskCreatePinnedToCore(LidarTask, "Task0", 1000, NULL, 1, &Task0, 0);
     // }
 }
 
