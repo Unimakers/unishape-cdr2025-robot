@@ -6,7 +6,8 @@ void ActionList::initialCoord(ActionHandle* actionHandle){
 }
 void ActionList::strat(){
     // NAction(ACT::FORWARD, ActVar{.distance=10000});
-    NAction(ACT::DIFFMOVE,ActVar{.distance=100,.angle=90});
+    NAction(ACT::DIFFMOVE,ActVar{.distance=1000,.angle=90});
+    NAction(ACT::DIFFMOVE,ActVar{.distance=2000,.angle=-100});
     // if(this->teamBlue){
     //     NAction(ACT::MOVETO, ActVar{.target = Coord{2225,450,0}});
     //     NAction(ACT::FORWARD, ActVar{.distance = 300});
