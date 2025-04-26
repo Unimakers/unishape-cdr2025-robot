@@ -163,6 +163,7 @@ bool RobotMove::Run(){
 }
 /// @brief check the current position of the robot
 void RobotMove::checkPosition(){
+    
     currentPos.x = (left.currentPosition() + right.currentPosition())/2;
     currentPos.y = (left.currentPosition() + right.currentPosition())/2;
     currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;

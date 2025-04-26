@@ -36,6 +36,7 @@ class RobotMove
 {
 protected:
     AccelStepper left, right;
+    
     ActionDistance currentAction;
     ActionMoveTo currentActionMoveTo;
     bool paused = true;
