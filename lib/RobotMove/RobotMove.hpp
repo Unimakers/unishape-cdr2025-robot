@@ -36,7 +36,7 @@ class RobotMove
 {
 protected:
     AccelStepper left, right;
-    
+
     ActionDistance currentAction;
     ActionMoveTo currentActionMoveTo;
     bool paused = true;
@@ -64,6 +64,6 @@ public:
     void setSpeed(int speed);
     void setAcceleration(int acceleration);
     bool Run();
-
+    bool diffMove(double angle, int ray, int speed=ROBOT_VARIABLES::STEPPER::DEFAULT_SPEED);
     RobotMove();
 };

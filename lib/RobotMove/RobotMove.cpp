@@ -163,7 +163,7 @@ bool RobotMove::Run(){
 }
 /// @brief check the current position of the robot
 void RobotMove::checkPosition(){
-    
+
     currentPos.x = (left.currentPosition() + right.currentPosition())/2;
     currentPos.y = (left.currentPosition() + right.currentPosition())/2;
     currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;
@@ -197,5 +197,35 @@ bool RobotMove::turnTo(int angle, int speed){
     }
     int angleToTurn = angle - currentPos.angle;
     turn(angleToTurn, speed);
+    return true;
+}
+bool RobotMove::diffMove(double angle, int ray, int speed){
+    if(paused){
+        return false;
+    }
+    double angleRad = ((double) angle) * PI / (double)180;
+    int diameter = ROBOT_VARIABLES::WIDTH;
+    double left_c_width = ray-(diameter/2);
+    double right_c_width = ray+(diameter/2);
+    double left_length = angleRad*left_c_width;
+    double right_length = angleRad*right_c_width;
+    currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(left_length);
+    currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(right_length);
+    int lspeed,rspeed;
+    if(left_length>right_length){
+        lspeed=speed;
+        rspeed=(lspeed/left_length)*right_length;
+    }
+    else{
+        rspeed=speed;
+        lspeed=(rspeed/right_length)*left_length;
+    }
+    Serial.print("LeftSpeed:");Serial.print(lspeed);Serial.print("RSpeed");Serial.println(rspeed);
+    left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(lspeed));
+    right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(rspeed));
+    left.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
+    right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
+    left.move(currentAction.left);
+    right.move(currentAction.right);
     return true;
 }

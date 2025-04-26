@@ -218,15 +218,15 @@ void setup()
 void loop()
 {
 
-    Serial.println("err1");
+    // Serial.println("err1");
     if (gState != G_STATE::LOOPING)
         return;
-    Serial.println("err2");
+    // Serial.println("err2");
     if (getLidarStatus())
     {
         actionHandle.setState(ActionHandle::STATE::PAUSED);
     }
-    Serial.println("err3");
+    // Serial.println("err3");
     actionHandle.actionLoop();
     // delay(250);
 }

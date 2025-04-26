@@ -24,6 +24,7 @@ public:
         TURN,   // tourne retation relative
         TURNTO, // tourne jusqu'a votre un angle donnée
         MOVETO,
+        DIFFMOVE,
         PAUSE, // arret des mouvement
         RESUME,
         WAIT, // attendre  un certains temps des ordre du h
@@ -59,6 +60,7 @@ public:
     void actionLoop();
     ActionItem getAction(int index);
     ActionItem getCurrentAction();
+    ActionItem getRunningAction();
     void addAction(ActionItem action);
     void addActionEasy(ACTION action,ActionItem actionvar={});
     void initRobot();

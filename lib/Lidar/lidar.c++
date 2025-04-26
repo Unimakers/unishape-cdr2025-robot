@@ -72,7 +72,7 @@ void get_point_lidar()
                     double yPoint = sin(mesure.angle) * mesure.distance;
                     Serial.println(((std::string) ">point:" + std::to_string(xPoint) + ":" + std::to_string(yPoint) + "|xy").c_str());
                     sumPoints++;
-                    // sendObstacleData(true);
+                    sendObstacleData(true);
                 }
             }
             else

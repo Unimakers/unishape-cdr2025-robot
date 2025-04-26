@@ -55,6 +55,10 @@ bool ActionHandle::callAction(ActionItem action)
     case ACTION::MOVETO:
         return this->robot.moveTo(action.target, action.speed);
         break;
+    case ACTION::DIFFMOVE:
+        Serial.println("diffmove!!!");
+        return this->robot.diffMove(action.angle,action.distance,action.speed);
+        break;
     case ACTION::PAUSE:
         return this->robot.pause();
         break;
@@ -113,12 +117,12 @@ void ActionHandle::setState(STATE state){
     this->state = state;
 }
 void ActionHandle::actionLoop(){
-    Serial.println("entering first step of debug");
+    // Serial.println("entering first step of debug");
     // Serial.println(((std::string)"Actions is of size: "+std::to_string(actions.size())).c_str());
     if (getState() == STATE::RUNNING)
     {
-        Serial.println("entering sec1 step of debug");
-        if (actionfinished(getCurrentAction()) && getState() == STATE::RUNNING)
+        // Serial.println("entering sec1 step of debug");
+        if (actionfinished(getRunningAction()) && getState() == STATE::RUNNING)
         {
             Serial.println("action fini");
             setState(STATE::IDLE);
@@ -131,8 +135,8 @@ void ActionHandle::actionLoop(){
     }
     else if (getState() == STATE::IDLE)
     {
-        Serial.println("entering sec2 step of debug");
-        Serial.println("hellow");
+        // Serial.println("entering sec2 step of debug");
+        // Serial.println("hellow");
         // Serial.println(DEV_VARIABLES::MAX_ACTION_AMOUNT);
         if (this->actionIndex < actions.size())
         {
@@ -159,6 +163,9 @@ ActionHandle::ActionItem ActionHandle::getAction(int index){
 ActionHandle::ActionItem ActionHandle::getCurrentAction(){
     Serial.println("inside getCurr");
     return getAction(this->actionIndex);
+}
+ActionHandle::ActionItem ActionHandle::getRunningAction(){
+    return getAction(this->actionIndex-1);
 }
 void ActionHandle::addAction(ActionItem action){
     Serial.println("wow i receive an action!");
@@ -239,6 +246,9 @@ std::string ActionHandle::debugActionEnumString(ACTION act){
         break;
     case ACTION::ACTIONNEUR_STOP:
         return "ACTIONNEUR_STOP";
+        break;
+    case ACTION::DIFFMOVE:
+        return "DIFFMOVE";
         break;
     default:
         break;
