@@ -1,7 +1,6 @@
 #include <ActionHandle.hpp>
 
 
-
 ActionHandle::ActionHandle()
 {
     this->robot = RobotMove();
@@ -66,7 +65,7 @@ bool ActionHandle::callAction(ActionItem action)
         return true;
         break;
     case ACTION::BUZZ:
-        tone(12, action.tonality, action.time);
+        superbuzz(action.tonality, action.time);
         return true;
         break;
     // case ACTION::ACTIONNEUR_LIFT_UP:
@@ -95,20 +94,20 @@ bool ActionHandle::callAction(ActionItem action)
 }
 void ActionHandle::waitTirette()
 {
-    tone(12, 666, 250);
+    superbuzz(666, 250);
     while (digitalRead(PIN::DIVERS::TIRETTE))
     {
         Serial.println("Tirette absente");
         delay(500);
     }
-    tone(12, 260, 250);
+    superbuzz(260, 250);
     Serial.println("Tirette en place");
     delay(1000);
     while (!digitalRead(PIN::DIVERS::TIRETTE))
         ;
     Serial.println("Tirette retirée");
     delay(1000);
-    tone(12, 175, 250);
+    superbuzz(175, 250);
 }
 void ActionHandle::setState(STATE state){
     this->state = state;
