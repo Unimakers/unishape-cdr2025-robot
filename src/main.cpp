@@ -192,20 +192,23 @@ void setup()
     gState = G_STATE::INITIALIZING;
     Serial.begin(115200);
     delay(1000);
+    pinMode(PIN::STEPPERS::LEFT_ENABLE, OUTPUT);
+    digitalWrite(PIN::STEPPERS::LEFT_ENABLE,HIGH);
     Serial.println("Préinitialisation");
     actionHandle = ActionHandle();
+    actionHandle.initRobot();
+    // return;
     ActionList actionList = ActionList();
     actionList.pushAction(&actionHandle);
     Serial.println(((std::string) "final op : " + std::to_string(actionHandle.actions.size())).c_str());
-    superbuzz(444, 250);
+    ActionHandle::superbuzz(444, 250);
     initLidar();
     // lidarSerial.begin(115200, 134217756U, RX, TX);
     //
     delay(500);
     pinMode(PIN::DIVERS::TIRETTE, INPUT_PULLUP);
-    superbuzz(300, 250);
+    ActionHandle::superbuzz(300, 250);
     actionHandle.waitTirette();
-    actionHandle.initRobot();
     Serial.println("Fin initialisation");
     actionHandle.setState(ActionHandle::STATE::IDLE);
     gState = G_STATE::LOOPING;
@@ -225,6 +228,6 @@ void loop()
     }
     Serial.println("err3");
     actionHandle.actionLoop();
-    delay(250);
+    // delay(250);
 }
 #endif

@@ -66,7 +66,8 @@ public:
     static std::string debugActionString(ActionItem actItem);
     static std::string debugActionEnumString(ACTION act);
     static std::string debugCoordString(Coord c);
+    static void superbuzz(unsigned int frequency, unsigned long duration =0L){
+        Serial.println(((std::string)"music! "+std::to_string(frequency)+" &"+std::to_string(duration)+"s").c_str());
+    }
+    
 };
-void superbuzz(unsigned int frequency, unsigned long duration =0L){
-    Serial.println(((std::string)"music! "+std::to_string(frequency)+" &"+std::to_string(duration)+"s").c_str());
-}

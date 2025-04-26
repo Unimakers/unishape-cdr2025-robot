@@ -6,6 +6,7 @@
 #include <string>
 
 RPLidar lidar;
+HardwareSerial lidarSerial(1);
 // HardwareSerial lidarSerial(1);
 TaskHandle_t Task0;
 
@@ -43,7 +44,7 @@ bool angleInRange()
 // FONCTION COEUR 0 (COUEUR LIDAR)
 void get_point_lidar()
 {
-    Serial.println("hello111");
+    // Serial.println("hello111");
     // BUG HERE v (lidar.waitPoint()) Guru meditation Error Core 0 panic'ed Unhandled debug exception Stack canary watchpoint triggered
     if (IS_OK(lidar.waitPoint()))
     {
@@ -79,11 +80,12 @@ void get_point_lidar()
                 reset_point();
             }
         }
+        delay(250);
     }
     else
     {
-        analogWrite(PIN::LIDAR::PWM, 0); // stop the rplidar motor
-        Serial.println("Lidar Stopped");
+        // analogWrite(PIN::LIDAR::PWM, 0); // stop the rplidar motor
+        // Serial.println("Lidar Stopped");
         // try to detect RPLIDAR...
         rplidar_response_device_info_t info;
         if (IS_OK(lidar.getDeviceInfo(info, 100)))
@@ -111,11 +113,11 @@ void LidarTask(void *pvParameters)
     //     // lidarInitialized = true;
     //     // taskEXIT_CRITICAL(&my_spinlock);
     // }
-    lidar.begin(Serial1);
+    lidar.begin(lidarSerial, 17, 18);
     lidar.startScan();
     for (;;)
     {
-        Serial.println("hello");
+        // Serial.println("hello");
         get_point_lidar();
         delay(250);
     }

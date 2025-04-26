@@ -71,41 +71,26 @@ namespace DEV_VARIABLES
         DEV_TEST_IN_ROBOT = TEST_ROBOT_MODE,
         MAX_ACTION_AMOUNT = 20;
 }
-
 namespace ROBOT_VARIABLES
 {
-// #if TEST_ROBOT_MODE == 1
-//     constexpr float WHEEL_DIAMETER = 0.07; // 0.07 m = 7cm
-// #elif TEST_ROBOT_MODE == 2
-//     constexpr float WHEEL_DIAMETER = 0.06; // 0.06 m = 6cm
-// #else
-    constexpr float WHEEL_DIAMETER = 0.06; // 0.06 m = 6cm
-// #endif
-// #if TEST_ROBOT_MODE == 1
-//     constexpr float WIDTH = 95; // 95 mm = 9.5 cm
-// #elif TEST_ROBOT_MODE == 2
-//     constexpr float WIDTH = 245; // 300 mm = 30 cm
-// #else
+    constexpr float WHEEL_DIAMETER = 60; // 60 mm = 6cm
+    constexpr int MICROSTEP_FACTOR = 16; // 1/16 microstep
     constexpr float WIDTH = 300; // 300 mm = 30 cm
-// #endif
-    namespace STEPPER
+    namespace STEPPER // Stepper vars
     {
         constexpr int
             DEFAULT_SPEED = 200; // 200 mm/s
         constexpr float
             ANGLE = 1.8,           // 1.8 degrees per step
             ACCELERATION = 100.0,  // 100 mm/s^2
-            STEPS_PER_REV = 200.0; // 200 steps per revolution
+            STEPS_PER_REV = 200.0*MICROSTEP_FACTOR; // 200 steps per revolution
         constexpr bool
-            LEFT_INVERTED = true,
-            RIGHT_INVERTED = false;
-// #if TEST_ROBOT_MODE == 1
-//         constexpr float STEPS_PER_MM = 14.8F;
-// #elif TEST_ROBOT_MODE == 2
-//         constexpr float STEPS_PER_MM = STEPS_PER_REV / (WHEEL_DIAMETER * 3.14159265359); // 200 steps per revolution / (0.06m * 3.14159265359)
-// #else
+            LEFT_INVERTED = false, // is left inverted ?
+            RIGHT_INVERTED = true; // is right inverted ?
         constexpr float STEPS_PER_MM = STEPS_PER_REV / (WHEEL_DIAMETER * 3.14159265359); // 200 steps per revolution / (0.06m * 3.14159265359)
-// #endif
+        /// @brief super mm to step convert
+        /// @param mm mm to convert
+        /// @return step from mm
         constexpr float MmToStep(float mm)
         {
             return mm * STEPS_PER_MM;
@@ -114,7 +99,8 @@ namespace ROBOT_VARIABLES
         {
             return step / STEPS_PER_MM;
         }
+        constexpr float SSS= MmToStep(20);
 
     }
 
-}
+};

@@ -3,7 +3,6 @@
 
 ActionHandle::ActionHandle()
 {
-    this->robot = RobotMove();
     // this->actionneur = Actionneur();
     this->Waitstart = 0;
     this->actionIndex = 0;
@@ -14,6 +13,7 @@ ActionHandle::STATE ActionHandle::getState(){
     return this->state;
 }
 void ActionHandle::initRobot(){
+    this->robot = RobotMove();
     this->robot.resume();
     this->robot.printHello();
 }
@@ -114,22 +114,24 @@ void ActionHandle::setState(STATE state){
 }
 void ActionHandle::actionLoop(){
     Serial.println("entering first step of debug");
-    Serial.println(((std::string)"Actions is of size: "+std::to_string(actions.size())).c_str());
+    // Serial.println(((std::string)"Actions is of size: "+std::to_string(actions.size())).c_str());
     if (getState() == STATE::RUNNING)
     {
         Serial.println("entering sec1 step of debug");
         if (actionfinished(getCurrentAction()) && getState() == STATE::RUNNING)
         {
+            Serial.println("action fini");
             setState(STATE::IDLE);
         }
         else
         {
+            Serial.println(((std::string)"run!!!"+std::to_string(millis())).c_str());
             this->robot.Run();
         }
     }
-    Serial.println("entering sec2 step of debug");
-    if (getState() == STATE::IDLE)
+    else if (getState() == STATE::IDLE)
     {
+        Serial.println("entering sec2 step of debug");
         Serial.println("hellow");
         // Serial.println(DEV_VARIABLES::MAX_ACTION_AMOUNT);
         if (this->actionIndex < actions.size())

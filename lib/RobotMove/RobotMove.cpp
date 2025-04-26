@@ -65,18 +65,22 @@ bool RobotMove::forward(int distance, int speed){
     if(paused){
         return false;
     }
-    Serial.println("Hello2Forward");
+    // Serial.println("Hello2Forward");
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(distance);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(distance);
-    Serial.println("Okok");
-    Serial.println("Speed : "+String(speed));
-    Serial.println("Step Speed: "+String(ROBOT_VARIABLES::STEPPER::MmToStep(speed)));
-    Serial.println("CurAction Left: "+String(currentAction.left));
-    Serial.println("CurAction Right: "+String(currentAction.right));
+    // Serial.println("Okok");
+    // Serial.println("Speed : "+String(speed));
+    // Serial.println("Step Speed: "+String(ROBOT_VARIABLES::STEPPER::MmToStep(speed)));
+    // Serial.println("CurAction Left: "+String(currentAction.left));
+    // Serial.println("CurAction Right: "+String(currentAction.right));
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
     right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
     left.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
     right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
+    // left.setMaxSpeed(200);
+    // right.setMaxSpeed(200);
+    // left.setAcceleration(100);
+    // right.setAcceleration(100);
     left.move(currentAction.left);
     right.move(currentAction.right);
     return true;
