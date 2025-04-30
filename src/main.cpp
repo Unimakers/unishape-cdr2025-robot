@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define BONJOUR 1
+#define BONJOUR 0
 #if BONJOUR == 2
 #include <Arduino.h>
 #include <RPLidar.h>
@@ -140,32 +140,22 @@ AccelStepper left;
 void setup()
 {
     Serial.begin(115200);
-    delay(1000);
     Serial.println("ESP32-S3 Startup");
-    pinMode(46, INPUT);
+    pinMode(PIN::STEPPERS::LEFT_ENABLE, OUTPUT);
+    digitalWrite(46, LOW);
     delay(1000);
-    while (1)
-    {
-        digitalWrite(46, HIGH);
-        delay(1000);
-        digitalWrite(46, LOW);
-        delay(1000);
-    }
     left = AccelStepper(AccelStepper::DRIVER, PIN::STEPPERS::LEFT_STEP, PIN::STEPPERS::LEFT_DIR);
-    left.setAcceleration(20);
-    left.setSpeed(250);
-    left.move(1000);
+    left.setAcceleration(2500);
+    left.setMaxSpeed(5000);
+    left.move(10000);
     //   rob = RobotMove();
     //   rob.forward(1000,20);
 }
 // DOOOOOODOOOOOOOOOOOOOOOOOOOOO jvais dormir par terre sinon.....
 void loop()
 {
-    Serial.println("Loop running");
+    //Serial.println("Loop running");
     left.run();
-    //   rob.Run();
-
-    delay(1000);
 }
 // FIN DEBUG
 #else

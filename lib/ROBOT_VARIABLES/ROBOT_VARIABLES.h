@@ -82,7 +82,7 @@ namespace ROBOT_VARIABLES
             DEFAULT_SPEED = 200; // 200 mm/s
         constexpr float
             ANGLE = 1.8,           // 1.8 degrees per step
-            ACCELERATION = 100.0,  // 100 mm/s^2
+            ACCELERATION = 5000.0,  // 100 mm/s^2
             STEPS_PER_REV = 200.0*MICROSTEP_FACTOR; // 200 steps per revolution
         constexpr bool
             LEFT_INVERTED = false, // is left inverted ?
