@@ -134,30 +134,37 @@ void loop()
 // ça marche pas...
 // #include <RobotMove.hpp>
 // RobotMove rob;
-#include <AccelStepper.h>
-#include <ROBOT_VARIABLES.h>
-AccelStepper left;
+// #include <AccelStepper.h>
+// #include <ROBOT_VARIABLES.h>
+// AccelStepper left;
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(12500);
     Serial.println("ESP32-S3 Startup");
-    pinMode(PIN::STEPPERS::LEFT_ENABLE, OUTPUT);
-    digitalWrite(46, LOW);
-    delay(1000);
-    left = AccelStepper(AccelStepper::DRIVER, PIN::STEPPERS::LEFT_STEP, PIN::STEPPERS::LEFT_DIR);
-    left.setAcceleration(2500);
-    left.setMaxSpeed(5000);
-    left.move(10000);
+    // pinMode(PIN::STEPPERS::LEFT_ENABLE, OUTPUT);
+    // digitalWrite(46, LOW);
+    // delay(1000);
+    // left = AccelStepper(AccelStepper::DRIVER, PIN::STEPPERS::LEFT_STEP, PIN::STEPPERS::LEFT_DIR);
+    // left.setAcceleration(2500);
+    // left.setMaxSpeed(5000);
+    // left.move(10000);
     //   rob = RobotMove();
     //   rob.forward(1000,20);
 }
 // DOOOOOODOOOOOOOOOOOOOOOOOOOOO jvais dormir par terre sinon.....
 void loop()
 {
-    //Serial.println("Loop running");
-    left.run();
+    Serial.println("Loop running");
+    // left.run();
 }
 // FIN DEBUG
+#elif BONJOUR == 5
+void setup(){
+
+}
+void loop(){
+
+}
 #else
 
 #include <lidar.c++>
