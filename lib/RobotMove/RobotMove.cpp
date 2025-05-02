@@ -77,6 +77,12 @@ bool RobotMove::forward(int distance, int speed){
     right.setMaxSpeed(speed);
     left.setAcceleration(speed/2);
     right.setAcceleration(speed/2);
+    Coord c = getCurrentCoords();
+    setCurrentCoords(
+        c.x+(cos(c.angle)*distance),
+        c.y+(sin(c.angle)*distance),
+        c.angle
+    );
     // left.setMaxSpeed(200);
     // right.setMaxSpeed(200);
     // left.setAcceleration(100);
@@ -189,6 +195,8 @@ bool RobotMove::turn(int angle, int speed){
     right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
     left.move(currentAction.left);
     right.move(currentAction.right);
+    Coord c=getCurrentCoords();
+    setCurrentCoords(c.x,c.y,c.angle+angleRad);
     return true;
 }
 bool RobotMove::turnTo(int angle, int speed){
@@ -227,5 +235,18 @@ bool RobotMove::diffMove(double angle, int ray, int speed){
     right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
     left.move(currentAction.left);
     right.move(currentAction.right);
+    Coord currentCoord= getCurrentCoords();
+    double absolute_yuri_angle = currentCoord.angle+(ray<0?-PI/2:PI/2);
+    Coord yuri_rel= Coord{
+        .x=cos(absolute_yuri_angle),
+        .y=sin(absolute_yuri_angle)
+    };
+    Coord ray_center_coord=Coord{.x=currentCoord.x+yuri_rel.x,.y=currentCoord.y+yuri_rel.y};
+    Coord pos_finale = Coord{
+        .x=ray_center_coord.x+cos(currentCoord.angle+angleRad)*ray,
+        .y=ray_center_coord.y+sin(currentCoord.angle+angleRad)*ray,
+        .angle=currentCoord.angle+angleRad
+    };
+    setCurrentCoords(pos_finale);
     return true;
 }
