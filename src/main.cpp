@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define BONJOUR 0
+#define BONJOUR 1
 #if BONJOUR == 2
 #include <Arduino.h>
 #include <RPLidar.h>
