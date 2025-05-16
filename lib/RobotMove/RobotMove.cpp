@@ -12,7 +12,7 @@ RobotMove::RobotMove():left(AccelStepper::DRIVER, PIN::STEPPERS::LEFT_STEP, PIN:
     currentPos = {0,0,0};
 }
 void RobotMove::printHello(){
-    Serial.println("Hello");
+    debugPrintln("Hello");
 }
 /// @brief check if the robot has reached the target
 /// @return true if the robot has reached the target else false
@@ -65,18 +65,24 @@ bool RobotMove::forward(int distance, int speed){
     if(paused){
         return false;
     }
-    // Serial.println("Hello2Forward");
+    // debugPrintln("Hello2Forward");
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(distance);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(distance);
-    // Serial.println("Okok");
-    // Serial.println("Speed : "+String(speed));
-    // Serial.println("Step Speed: "+String(ROBOT_VARIABLES::STEPPER::MmToStep(speed)));
-    // Serial.println("CurAction Left: "+String(currentAction.left));
-    // Serial.println("CurAction Right: "+String(currentAction.right));
-    left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
-    right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
-    left.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
-    right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
+    // debugPrintln("Okok");
+    // debugPrintln("Speed : "+String(speed));
+    // debugPrintln("Step Speed: "+String(ROBOT_VARIABLES::STEPPER::MmToStep(speed)));
+    // debugPrintln("CurAction Left: "+String(currentAction.left));
+    // debugPrintln("CurAction Right: "+String(currentAction.right));
+    left.setMaxSpeed(speed);
+    right.setMaxSpeed(speed);
+    left.setAcceleration(speed/2);
+    right.setAcceleration(speed/2);
+    Coord c = getCurrentCoords();
+    setCurrentCoords(
+        c.x+(cos(c.angle)*distance),
+        c.y+(sin(c.angle)*distance),
+        c.angle
+    );
     // left.setMaxSpeed(200);
     // right.setMaxSpeed(200);
     // left.setAcceleration(100);
@@ -115,15 +121,17 @@ void handleMoveTo(){
 bool RobotMove::pause(){
     currentAction.left = left.distanceToGo();
     currentAction.right = right.distanceToGo();
-    left.stop();
-    right.stop();
+    left.move(0);
+    right.move(0);
+    currentAction.left = currentAction.left + left.distanceToGo();
+    currentAction.right = currentAction.right + right.distanceToGo();
     paused = true;
     return true;
 }
 /// @brief  resume the robot
 /// @return true
 bool RobotMove::resume(){
-    Serial.println("Resume robot");
+    debugPrintln("Resume robot");
     left.move(currentAction.left);
     right.move(currentAction.right);
     paused = false;
@@ -163,10 +171,10 @@ bool RobotMove::Run(){
 }
 /// @brief check the current position of the robot
 void RobotMove::checkPosition(){
-    
-    currentPos.x = (left.currentPosition() + right.currentPosition())/2;
-    currentPos.y = (left.currentPosition() + right.currentPosition())/2;
-    currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;
+
+    // currentPos.x = (left.currentPosition() + right.currentPosition())/2;
+    // currentPos.y = (left.currentPosition() + right.currentPosition())/2;
+    // currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;
 }
 /// @brief Turn the robot
 /// @param angle angle in degrees
@@ -178,9 +186,9 @@ bool RobotMove::turn(int angle, int speed){
     }
     int diameter = ROBOT_VARIABLES::WIDTH;
     double angleRad = ((double) angle) * PI / (double)180;
-    Serial.println("AngleRad: "+String(angleRad));
+    debugPrintln("AngleRad: "+String(angleRad));
     float circleArc = angleRad * (diameter/2);
-    Serial.println("CircleArc: "+String(circleArc));
+    debugPrintln("CircleArc: "+String(circleArc));
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(circleArc);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(-circleArc);
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
@@ -189,6 +197,8 @@ bool RobotMove::turn(int angle, int speed){
     right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
     left.move(currentAction.left);
     right.move(currentAction.right);
+    Coord c=getCurrentCoords();
+    setCurrentCoords(c.x,c.y,c.angle+angleRad);
     return true;
 }
 bool RobotMove::turnTo(int angle, int speed){
@@ -197,5 +207,48 @@ bool RobotMove::turnTo(int angle, int speed){
     }
     int angleToTurn = angle - currentPos.angle;
     turn(angleToTurn, speed);
+    return true;
+}
+bool RobotMove::diffMove(double angle, int ray, int speed){
+    if(paused){
+        return false;
+    }
+    double angleRad = ((double) angle) * PI / (double)180;
+    int diameter = ROBOT_VARIABLES::WIDTH;
+    double left_c_width = ray-(diameter/2);
+    double right_c_width = ray+(diameter/2);
+    double left_length = angleRad*left_c_width;
+    double right_length = angleRad*right_c_width;
+    currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(left_length);
+    currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(right_length);
+    int lspeed,rspeed;
+    if(left_length>right_length){
+        lspeed=speed;
+        rspeed=(lspeed/left_length)*right_length;
+    }
+    else{
+        rspeed=speed;
+        lspeed=(rspeed/right_length)*left_length;
+    }
+    debugPrint("LeftSpeed:");debugPrint(lspeed);debugPrint("RSpeed");debugPrintln(rspeed);
+    left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(lspeed));
+    right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(rspeed));
+    left.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
+    right.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
+    left.move(currentAction.left);
+    right.move(currentAction.right);
+    Coord currentCoord= getCurrentCoords();
+    double absolute_yuri_angle = currentCoord.angle+(ray<0?-PI/2:PI/2);
+    Coord yuri_rel= Coord{
+        .x=cos(absolute_yuri_angle),
+        .y=sin(absolute_yuri_angle)
+    };
+    Coord ray_center_coord=Coord{.x=currentCoord.x+yuri_rel.x,.y=currentCoord.y+yuri_rel.y};
+    Coord pos_finale = Coord{
+        .x=ray_center_coord.x+cos(currentCoord.angle+angleRad)*ray,
+        .y=ray_center_coord.y+sin(currentCoord.angle+angleRad)*ray,
+        .angle=currentCoord.angle+angleRad
+    };
+    setCurrentCoords(pos_finale);
     return true;
 }
