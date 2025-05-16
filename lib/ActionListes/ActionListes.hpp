@@ -18,19 +18,19 @@ class ActionList
     void NAction(ACT action, ActVar actionvar){
         if(ActionHandle::debugActionEnumString(action)=="UNKNOWN") return;
         ActionHandle::ActionItem actionItem = ActionHandle::ActionItem{};
-        Serial.println("from here");
+        debugPrintln("from here");
         actionItem.action = action;
         actionItem.distance = actionvar.distance;
         actionItem.speed = actionvar.speed;
         actionItem.angle = actionvar.angle;
         actionItem.time = actionvar.time;
         actionItem.target = actionvar.target;
-        Serial.println(ActionHandle::debugActionString(actionItem).c_str());
+        debugPrintln(ActionHandle::debugActionString(actionItem).c_str());
         actions.push_back(actionItem);
     }
     void pushAction(ActionHandle* actionHandle){
         this->teamBlue=(bool)digitalRead(PIN::DIVERS::TEAM_SWITCH);
-        Serial.println("wow!");
+        debugPrintln("wow!");
         initialCoord(actionHandle);
         strat();
         for (auto action : actions)

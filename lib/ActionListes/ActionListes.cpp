@@ -10,6 +10,9 @@ void ActionList::strat(){
     // NAction(ACT::DIFFMOVE,ActVar{.distance=200,.speed=2000,.angle=-100});
     // NAction(ACT::DIFFMOVE,ActVar{.distance=0,.speed=2000,.angle=280});
     NAction(ACT::FORWARD, ActVar{.distance=1000,.speed=5000});
+    NAction(ACT::BACKWARD, ActVar{.distance=1000,.speed=5000});
+    NAction(ACT::FORWARD, ActVar{.distance=1000,.speed=5000});
+    NAction(ACT::BACKWARD, ActVar{.distance=1000,.speed=5000});
     // if(this->teamBlue){
     //     NAction(ACT::MOVETO, ActVar{.target = Coord{2225,450,0}});
     //     NAction(ACT::FORWARD, ActVar{.distance = 300});

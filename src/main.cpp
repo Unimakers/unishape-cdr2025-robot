@@ -15,7 +15,7 @@ HardwareSerial lidarSerial(1);
 void setup()
 {
     Serial.begin(115200);
-    Serial.println("setup");
+    debugPrintln("setup");
     pinMode(PIN::LIDAR::PWM, OUTPUT);
     analogWrite(PIN::LIDAR::PWM, 150);
     // xTaskCreatePinnedToCore(LidarProcess, "Task0", 1000, NULL, 1, &Task0, 0);
@@ -28,12 +28,12 @@ typedef struct RPLidarMeasurement RPLIDARRES;
 double superanglei = 0.0;
 void loop()
 {
-    Serial.print("loop core0 :");
-    Serial.println(millis());
+    debugPrint("loop core0 :");
+    debugPrintln(millis());
     // toujours au meme endroit, le IS_OK(lidar.waitPoint()) crée un stack canary watchpoint trigger sur le core 0
     if (IS_OK(lidar.waitPoint()))
     {
-        Serial.print(">point:");
+        debugPrint(">point:");
         RPLIDARRES mesureRes = lidar.getCurrentPoint();
         if (mesureRes.distance < 1000 && mesureRes.quality > 14)
         {
@@ -41,30 +41,30 @@ void loop()
             float distance = mesureRes.distance;
             float x = cos(angle) * distance;
             float y = sin(angle) * distance;
-            Serial.print((double)x);
-            Serial.print(":");
-            Serial.print((double)y);
-            Serial.print(";");
+            debugPrint((double)x);
+            debugPrint(":");
+            debugPrint((double)y);
+            debugPrint(";");
             
         }
-        Serial.print((double)cos(superanglei) * 200);
-        Serial.print(":");
-        Serial.print((double)sin(superanglei) * 200);
-        // Serial.print(":");
-        // Serial.print((double)millis());
-        Serial.println("|xy");
+        debugPrint((double)cos(superanglei) * 200);
+        debugPrint(":");
+        debugPrint((double)sin(superanglei) * 200);
+        // debugPrint(":");
+        // debugPrint((double)millis());
+        debugPrintln("|xy");
         superanglei+=0.1;
         delay(125);
     }
     else
     {
         // analogWrite(D0, 0); // stop the rplidar motor
-        Serial.println("Lidar Stopped");
+        debugPrintln("Lidar Stopped");
         // try to detect RPLIDAR...
         rplidar_response_device_info_t info;
         if (IS_OK(lidar.getDeviceInfo(info, 100)))
         {
-            Serial.println("Lidar found");
+            debugPrintln("Lidar found");
             // detected...
             lidar.startScan();
             // analogWrite(D0, 150);
@@ -72,7 +72,7 @@ void loop()
         }
         else
         {
-            Serial.println("Lidar not found");
+            debugPrintln("Lidar not found");
         }
     }
     delay(25);
@@ -84,8 +84,8 @@ void loop()
 //     lidar.startScan();
 //     for (;;)
 //     {
-//         Serial.print("loop core0 :");
-//         Serial.println(millis());
+//         debugPrint("loop core0 :");
+//         debugPrintln(millis());
 //         // toujours au meme endroit, le IS_OK(lidar.waitPoint()) crée un stack canary watchpoint trigger sur le core 0
 //         if (IS_OK(lidar.waitPoint()))
 //         {
@@ -96,25 +96,25 @@ void loop()
 //                 float distance = mesureRes.distance;
 //                 float x = cos(angle) * distance;
 //                 float y = sin(angle) * distance;
-//                 Serial.print(">point:");
-//                 Serial.print((double)x);
-//                 Serial.print(":");
-//                 Serial.print((double)y);
-//                 // Serial.print(":");
-//                 // Serial.print((double)millis());
-//                 Serial.println("|xy");
+//                 debugPrint(">point:");
+//                 debugPrint((double)x);
+//                 debugPrint(":");
+//                 debugPrint((double)y);
+//                 // debugPrint(":");
+//                 // debugPrint((double)millis());
+//                 debugPrintln("|xy");
 //                 delay(250);
 //             }
 //         }
 //         else
 //         {
 //             // analogWrite(D0, 0); // stop the rplidar motor
-//             Serial.println("Lidar Stopped");
+//             debugPrintln("Lidar Stopped");
 //             // try to detect RPLIDAR...
 //             rplidar_response_device_info_t info;
 //             if (IS_OK(lidar.getDeviceInfo(info, 100)))
 //             {
-//                 Serial.println("Lidar found");
+//                 debugPrintln("Lidar found");
 //                 // detected...
 //                 lidar.startScan();
 //                 // analogWrite(D0, 150);
@@ -122,7 +122,7 @@ void loop()
 //             }
 //             else
 //             {
-//                 Serial.println("Lidar not found");
+//                 debugPrintln("Lidar not found");
 //             }
 //         }
 //         delay(25);
@@ -140,7 +140,7 @@ AccelStepper left;
 void setup()
 {
     Serial.begin(115200);
-    Serial.println("ESP32-S3 Startup");
+    debugPrintln("ESP32-S3 Startup");
     pinMode(PIN::STEPPERS::LEFT_ENABLE, OUTPUT);
     digitalWrite(46, LOW);
     delay(1000);
@@ -154,7 +154,7 @@ void setup()
 // DOOOOOODOOOOOOOOOOOOOOOOOOOOO jvais dormir par terre sinon.....
 void loop()
 {
-    Serial.println("Loop running");
+    debugPrintln("Loop running");
     left.run();
 }
 // FIN DEBUG
@@ -170,6 +170,7 @@ void loop(){
 #include <lidar.c++>
 #include <ActionHandle.hpp>
 #include <ActionListes.hpp>
+#include <ROBOT_VARIABLES.h>
 #include <string>
 
 ActionHandle actionHandle;
@@ -191,13 +192,13 @@ void setup()
     delay(1000);
     pinMode(PIN::STEPPERS::LEFT_ENABLE, OUTPUT);
     digitalWrite(PIN::STEPPERS::LEFT_ENABLE,HIGH);
-    Serial.println("Préinitialisation");
+    debugPrintln("Préinitialisation");
     actionHandle = ActionHandle();
     actionHandle.initRobot();
     // return;
     ActionList actionList = ActionList();
     actionList.pushAction(&actionHandle);
-    Serial.println(((std::string) "final op : " + std::to_string(actionHandle.actions.size())).c_str());
+    debugPrintln(((std::string) "final op : " + std::to_string(actionHandle.actions.size())).c_str());
     ActionHandle::superbuzz(444, 250);
     initLidar();
     // lidarSerial.begin(115200, 134217756U, RX, TX);
@@ -206,25 +207,27 @@ void setup()
     pinMode(PIN::DIVERS::TIRETTE, INPUT_PULLUP);
     ActionHandle::superbuzz(300, 250);
     actionHandle.waitTirette();
-    Serial.println("Fin initialisation");
+    debugPrintln("Fin initialisation");
     actionHandle.setState(ActionHandle::STATE::IDLE);
     gState = G_STATE::LOOPING;
-    Serial.println("Vraiment fin init");
+    debugPrintln("Vraiment fin init");
     // startTime= millis();
 }
 void loop()
 {
 
-    // Serial.println("err1");
+    // debugPrintln("err1");
     if (gState != G_STATE::LOOPING)
         return;
-    // Serial.println("err2");
+    // debugPrintln("err2");
     if (getLidarStatus())
     {
-        actionHandle.setState(ActionHandle::STATE::PAUSED);
+        actionHandle.pauseLidar();
+    }else{
+        actionHandle.continueLidar();
     }
-    // Serial.println("err3");
     actionHandle.actionLoop();
+    // debugPrintln("err3");
     // delay(250);
 }
 #endif

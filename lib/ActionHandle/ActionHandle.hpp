@@ -47,7 +47,7 @@ public:
         INITIALIZING,
         IDLE,
         RUNNING,
-        PAUSED // paused by security and not by external event => pause non programmed in action list (e.g. lidar detects obstacle)
+        PAUSED, // paused by security and not by external event => pause non programmed in action list (e.g. lidar detects obstacle)
     };
     STATE state = STATE::INITIALIZING;
     Actions actions;
@@ -69,7 +69,9 @@ public:
     static std::string debugActionEnumString(ACTION act);
     static std::string debugCoordString(Coord c);
     static void superbuzz(unsigned int frequency, unsigned long duration =0L){
-        Serial.println(((std::string)"music! "+std::to_string(frequency)+" &"+std::to_string(duration)+"s").c_str());
+        debugPrintln(((std::string)"music! "+std::to_string(frequency)+" &"+std::to_string(duration)+"s").c_str());
     }
+    void pauseLidar();
+    void continueLidar();
     
 };

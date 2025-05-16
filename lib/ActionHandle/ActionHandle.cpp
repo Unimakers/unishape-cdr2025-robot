@@ -56,7 +56,7 @@ bool ActionHandle::callAction(ActionItem action)
         return this->robot.moveTo(action.target, action.speed);
         break;
     case ACTION::DIFFMOVE:
-        Serial.println("diffmove!!!");
+        debugPrintln("diffmove!!!");
         return this->robot.diffMove(action.angle,action.distance,action.speed);
         break;
     case ACTION::PAUSE:
@@ -101,15 +101,15 @@ void ActionHandle::waitTirette()
     superbuzz(666, 250);
     while (digitalRead(PIN::DIVERS::TIRETTE))
     {
-        Serial.println("Tirette absente");
+        debugPrintln("Tirette absente");
         delay(500);
     }
     superbuzz(260, 250);
-    Serial.println("Tirette en place");
+    debugPrintln("Tirette en place");
     delay(1000);
     while (!digitalRead(PIN::DIVERS::TIRETTE))
         ;
-    Serial.println("Tirette retirée");
+    debugPrintln("Tirette retirée");
     delay(1000);
     superbuzz(175, 250);
 }
@@ -117,61 +117,63 @@ void ActionHandle::setState(STATE state){
     this->state = state;
 }
 void ActionHandle::actionLoop(){
-    // Serial.println("entering first step of debug");
-    // Serial.println(((std::string)"Actions is of size: "+std::to_string(actions.size())).c_str());
+    // debugPrintln("entering first step of debug");
+    // debugPrintln(((std::string)"Actions is of size: "+std::to_string(actions.size())).c_str());
     if (getState() == STATE::RUNNING)
     {
-        // Serial.println("entering sec1 step of debug");
+        // debugPrintln("entering sec1 step of debug");
         if (actionfinished(getRunningAction()) && getState() == STATE::RUNNING)
         {
-            Serial.println("action fini");
+            // debugPrintln("action fini");
             setState(STATE::IDLE);
         }
         else
         {
-            Serial.println(((std::string)"run!!!"+std::to_string(millis())).c_str());
+            // debugPrintln(((std::string)"run!!!"+std::to_string(millis())).c_str());
             this->robot.Run();
         }
     }
     else if (getState() == STATE::IDLE)
     {
-        // Serial.println("entering sec2 step of debug");
-        // Serial.println("hellow");
-        // Serial.println(DEV_VARIABLES::MAX_ACTION_AMOUNT);
+        // debugPrintln("entering sec2 step of debug");
+        // debugPrintln("hellow");
+        // debugPrintln(DEV_VARIABLES::MAX_ACTION_AMOUNT);
         if (this->actionIndex < actions.size())
         {
-            Serial.println("helloworld1");
+            debugPrintln("helloworld1");
             setState(STATE::RUNNING);
-            // Serial.println(getCurrentAction().distance);
+            // debugPrintln(getCurrentAction().distance);
             bool error = callAction(getCurrentAction());
             if (!error)
             {
-                Serial.println("Erreur dans l'action");
+                debugPrintln("Erreur dans l'action");
             }
             this->actionIndex++;
         }
+    }else if (getState()==STATE::PAUSED){
+        robot.Run();
     }
 }
 ActionHandle::ActionItem ActionHandle::getAction(int index){
-    Serial.println("inside get Sec");
+    // debugPrintln("inside get Sec");
     if(index < 0 || index >= actions.size()){
-        Serial.println("Index out of range");
+        debugPrintln("Index out of range");
         return ActionItem{};
     }
     return this->actions[index];
 }
 ActionHandle::ActionItem ActionHandle::getCurrentAction(){
-    Serial.println("inside getCurr");
+    // debugPrintln("inside getCurr");
     return getAction(this->actionIndex);
 }
 ActionHandle::ActionItem ActionHandle::getRunningAction(){
     return getAction(this->actionIndex-1);
 }
 void ActionHandle::addAction(ActionItem action){
-    Serial.println("wow i receive an action!");
-    Serial.println(debugActionString(action).c_str());
+    debugPrintln("wow i receive an action!");
+    debugPrintln(debugActionString(action).c_str());
     this->actions.push_back(action);
-    Serial.println(this->actions.size());
+    debugPrintln(this->actions.size());
 }
 void ActionHandle::addActionEasy(ACTION action,ActionItem actionvar){
     ActionItem newAction;
@@ -185,6 +187,18 @@ void ActionHandle::addActionEasy(ACTION action,ActionItem actionvar){
 }
 void ActionHandle::setRobotCoord(Coord coord){
     this->robot.setCurrentCoords(coord);
+}
+void ActionHandle::pauseLidar(){
+    if(this->getState()!=STATE::PAUSED){
+        this->setState(STATE::PAUSED);
+        robot.pause();
+    }
+}
+void ActionHandle::continueLidar(){
+    if(this->getState()==STATE::PAUSED){
+        this->setState(STATE::RUNNING);
+        robot.resume();
+    }
 }
 std::string ActionHandle::debugActionString(ActionItem actItem){
     std::string actionStr = debugActionEnumString(actItem.action);

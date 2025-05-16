@@ -9,6 +9,10 @@
 #define TEST_ROBOT_MODE 0
 
 
+#define debugPrint Serial.print
+#define debugPrintln Serial.println
+#define infoPrintln Serial.println
+#define infoPrint Serial.print
 
 namespace PIN
 {

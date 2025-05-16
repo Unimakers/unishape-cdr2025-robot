@@ -12,7 +12,7 @@ RobotMove::RobotMove():left(AccelStepper::DRIVER, PIN::STEPPERS::LEFT_STEP, PIN:
     currentPos = {0,0,0};
 }
 void RobotMove::printHello(){
-    Serial.println("Hello");
+    debugPrintln("Hello");
 }
 /// @brief check if the robot has reached the target
 /// @return true if the robot has reached the target else false
@@ -65,14 +65,14 @@ bool RobotMove::forward(int distance, int speed){
     if(paused){
         return false;
     }
-    // Serial.println("Hello2Forward");
+    // debugPrintln("Hello2Forward");
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(distance);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(distance);
-    // Serial.println("Okok");
-    // Serial.println("Speed : "+String(speed));
-    // Serial.println("Step Speed: "+String(ROBOT_VARIABLES::STEPPER::MmToStep(speed)));
-    // Serial.println("CurAction Left: "+String(currentAction.left));
-    // Serial.println("CurAction Right: "+String(currentAction.right));
+    // debugPrintln("Okok");
+    // debugPrintln("Speed : "+String(speed));
+    // debugPrintln("Step Speed: "+String(ROBOT_VARIABLES::STEPPER::MmToStep(speed)));
+    // debugPrintln("CurAction Left: "+String(currentAction.left));
+    // debugPrintln("CurAction Right: "+String(currentAction.right));
     left.setMaxSpeed(speed);
     right.setMaxSpeed(speed);
     left.setAcceleration(speed/2);
@@ -121,15 +121,17 @@ void handleMoveTo(){
 bool RobotMove::pause(){
     currentAction.left = left.distanceToGo();
     currentAction.right = right.distanceToGo();
-    left.stop();
-    right.stop();
+    left.move(0);
+    right.move(0);
+    currentAction.left = currentAction.left + left.distanceToGo();
+    currentAction.right = currentAction.right + right.distanceToGo();
     paused = true;
     return true;
 }
 /// @brief  resume the robot
 /// @return true
 bool RobotMove::resume(){
-    Serial.println("Resume robot");
+    debugPrintln("Resume robot");
     left.move(currentAction.left);
     right.move(currentAction.right);
     paused = false;
@@ -170,9 +172,9 @@ bool RobotMove::Run(){
 /// @brief check the current position of the robot
 void RobotMove::checkPosition(){
 
-    currentPos.x = (left.currentPosition() + right.currentPosition())/2;
-    currentPos.y = (left.currentPosition() + right.currentPosition())/2;
-    currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;
+    // currentPos.x = (left.currentPosition() + right.currentPosition())/2;
+    // currentPos.y = (left.currentPosition() + right.currentPosition())/2;
+    // currentPos.angle = (left.currentPosition() - right.currentPosition())/ROBOT_VARIABLES::STEPPER::STEPS_PER_MM;
 }
 /// @brief Turn the robot
 /// @param angle angle in degrees
@@ -184,9 +186,9 @@ bool RobotMove::turn(int angle, int speed){
     }
     int diameter = ROBOT_VARIABLES::WIDTH;
     double angleRad = ((double) angle) * PI / (double)180;
-    Serial.println("AngleRad: "+String(angleRad));
+    debugPrintln("AngleRad: "+String(angleRad));
     float circleArc = angleRad * (diameter/2);
-    Serial.println("CircleArc: "+String(circleArc));
+    debugPrintln("CircleArc: "+String(circleArc));
     currentAction.left = ROBOT_VARIABLES::STEPPER::MmToStep(circleArc);
     currentAction.right = ROBOT_VARIABLES::STEPPER::MmToStep(-circleArc);
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(speed));
@@ -228,7 +230,7 @@ bool RobotMove::diffMove(double angle, int ray, int speed){
         rspeed=speed;
         lspeed=(rspeed/right_length)*left_length;
     }
-    Serial.print("LeftSpeed:");Serial.print(lspeed);Serial.print("RSpeed");Serial.println(rspeed);
+    debugPrint("LeftSpeed:");debugPrint(lspeed);debugPrint("RSpeed");debugPrintln(rspeed);
     left.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(lspeed));
     right.setMaxSpeed(ROBOT_VARIABLES::STEPPER::MmToStep(rspeed));
     left.setAcceleration(ROBOT_VARIABLES::STEPPER::MmToStep(ROBOT_VARIABLES::STEPPER::ACCELERATION));
