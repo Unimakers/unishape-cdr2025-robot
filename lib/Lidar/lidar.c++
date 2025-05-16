@@ -19,7 +19,7 @@ bool lidarHasObstaclePiped = false;
 
 bool lidarHasObstacle = false;
 void sendObstacleData(bool);
-bool obstacle();
+bool obstacle(float);
 void reset_point();
 bool lidarInitialized = false;
 long cooldownstarted = 0;
