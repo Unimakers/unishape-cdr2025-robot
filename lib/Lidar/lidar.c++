@@ -51,7 +51,7 @@ void checkAndSendObstacle(bool a){
         return;
     }
 
-    if(cooldowning && abs((long)(millis()-cooldownstarted))<2000){
+    if(cooldowning && abs((long)(millis()-cooldownstarted))<15000){
         // debugPrint("waiting at ");
         debugPrintln(millis());
         sendObstacleData(true);
@@ -82,9 +82,9 @@ void get_point_lidar()
                 // debugPrintln(((std::string)("d"+std::to_string(mesure.distance))).c_str());
                 if (obstacle(mesure.distance))
                 {
-                    // double xPoint = cos(mesure.angle) * mesure.distance;
-                    // double yPoint = sin(mesure.angle) * mesure.distance;
-                    // debugPrintln(((std::string) ">point:" + std::to_string(xPoint) + ":" + std::to_string(yPoint) + "|xy").c_str());
+                    double xPoint = cos(mesure.angle) * mesure.distance;
+                    double yPoint = sin(mesure.angle) * mesure.distance;
+                    debugPrintln(((std::string) ">point:" + std::to_string(xPoint) + ":" + std::to_string(yPoint) + "|xy").c_str());
                     supobstacleval=true;
                 }
                 else{

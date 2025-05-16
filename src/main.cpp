@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define BONJOUR 1
+#define BONJOUR 99
 #if BONJOUR == 2
 #include <Arduino.h>
 #include <RPLidar.h>
@@ -17,7 +17,7 @@ void setup()
     Serial.begin(115200);
     debugPrintln("setup");
     pinMode(PIN::LIDAR::PWM, OUTPUT);
-    analogWrite(PIN::LIDAR::PWM, 150);
+    analogWrite(PIN::LIDAR::PWM,150);
     // xTaskCreatePinnedToCore(LidarProcess, "Task0", 1000, NULL, 1, &Task0, 0);
     // lidarSerial.end();
     // lidarSerial.begin(115200, SERIAL_8N1,TX,RX); //attention le code ici est changé
@@ -35,7 +35,7 @@ void loop()
     {
         debugPrint(">point:");
         RPLIDARRES mesureRes = lidar.getCurrentPoint();
-        if (mesureRes.distance < 1000 && mesureRes.quality > 14)
+        if (mesureRes.distance < 1000)
         {
             float angle = mesureRes.angle * (float)DEG_TO_RAD;
             float distance = mesureRes.distance;
@@ -54,7 +54,7 @@ void loop()
         // debugPrint((double)millis());
         debugPrintln("|xy");
         superanglei+=0.1;
-        delay(125);
+        delay(50);
     }
     else
     {
@@ -67,7 +67,7 @@ void loop()
             debugPrintln("Lidar found");
             // detected...
             lidar.startScan();
-            // analogWrite(D0, 150);
+            // analogWrite(D0,150);
             delay(1000);
         }
         else
