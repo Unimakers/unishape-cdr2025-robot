@@ -29,7 +29,7 @@ class ActionList
         actions.push_back(actionItem);
     }
     void pushAction(ActionHandle* actionHandle){
-        this->teamBlue=(bool)digitalRead(PIN::DIVERS::TEAM_SWITCH);
+        this->teamBlue=false;//(bool)digitalRead(PIN::DIVERS::TEAM_SWITCH);
         debugPrintln("wow!");
         initialCoord(actionHandle);
         strat();

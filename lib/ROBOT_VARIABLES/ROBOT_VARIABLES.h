@@ -3,7 +3,7 @@
 #ifndef ROBOT_VARIABLES_H
 #define ROBOT_VARIABLES_H
 #endif
-
+#include <Arduino.h>
 #define TEAM_NAME "UniGaffer"
 // 0 = UNISHAPE, 1= PAMITEST, 2= UNIWIP
 #define TEST_ROBOT_MODE 0
