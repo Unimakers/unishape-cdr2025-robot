@@ -167,7 +167,7 @@ void loop(){
 }
 #else
 
-#include <lidar.c++>
+#include <lidar.h>
 #include <ActionHandle.hpp>
 #include <ActionListes.hpp>
 #include <ROBOT_VARIABLES.h>

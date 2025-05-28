@@ -34,17 +34,17 @@ namespace PIN
 //             LEFT_ENABLE = 46,
 //             RIGHT_ENABLE = 46;
 // #else
-            LEFT_STEP = 14,
-            RIGHT_STEP = 12,
-            LEFT_DIR = 13,
-            RIGHT_DIR = 11,
-            LEFT_ENABLE = 46,
-            RIGHT_ENABLE = 46;
+            LEFT_STEP = D1,
+            RIGHT_STEP = D3,
+            LEFT_DIR = D0,
+            RIGHT_DIR = D2,
+            LEFT_ENABLE = D8,
+            RIGHT_ENABLE = D8;
 // #endif
     }
     namespace LIDAR
     {
-        constexpr int PWM = 3;
+        constexpr int PWM = D9;
     }
     namespace ACTIONNEUR
     {
@@ -64,8 +64,8 @@ namespace PIN
 // #elif TEST_ROBOT_MODE == 2
 //             TIRETTE = 8;
 // #else
-            TIRETTE = 8,
-            TEAM_SWITCH = 1;
+            TIRETTE = D10;
+            // TEAM_SWITCH=P0;
 // #endif
     }
 } // namespace PIN
