@@ -172,7 +172,10 @@ void loop(){
 #include <ActionListes.hpp>
 #include <ROBOT_VARIABLES.h>
 #include <string>
+#include <RobotMove.hpp>
+#include <RobotMove.cpp>
 
+RobotMove robotMove; // Crée une instance de RobotMove
 ActionHandle actionHandle;
 
 enum struct G_STATE
@@ -210,11 +213,13 @@ void setup()
     debugPrintln("Fin initialisation");
     actionHandle.setState(ActionHandle::STATE::IDLE);
     gState = G_STATE::LOOPING;
+    robotMove.forward(1000, 20);
     debugPrintln("Vraiment fin init");
     // startTime= millis();
 }
 void loop()
 {
+    robotMove.forward(1000, 20);
 
     // debugPrintln("err1");
     if (gState != G_STATE::LOOPING)
@@ -230,4 +235,5 @@ void loop()
     // debugPrintln("err3");
     // delay(250);
 }
+
 #endif
